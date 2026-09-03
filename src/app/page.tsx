@@ -29,7 +29,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-slate-900">Featured Cities</h2>
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-slate-600">
           Live pricing and yield data across 8 major UK investment cities.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -42,14 +42,14 @@ export default function HomePage() {
               <div className="h-28 bg-gradient-to-br from-slate-800 to-slate-600" />
               <div className="p-5">
                 <h3 className="text-lg font-bold text-slate-900">{city.name}</h3>
-                <p className="mt-1 text-sm text-slate-500">{city.tagline}</p>
+                <p className="mt-1 text-sm text-slate-600">{city.tagline}</p>
                 <div className="mt-4 space-y-2 border-t border-slate-100 pt-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">Avg. price</span>
+                    <span className="text-slate-600">Avg. price</span>
                     <span className="font-semibold text-slate-900">{formatGBP(city.avgPrice)}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">Rental yield</span>
+                    <span className="text-slate-600">Rental yield</span>
                     <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700">
                       {formatPercent(city.avgYield)}
                     </span>

@@ -11,7 +11,7 @@ export default function GuidesPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">Free Investment Guides</h1>
-      <p className="mt-3 max-w-xl text-slate-500">
+      <p className="mt-3 max-w-xl text-slate-600">
         Download our free, in-depth guides covering UK cities, overseas buying, and investment
         checklists — no obligation, just useful data.
       </p>
@@ -23,7 +23,7 @@ export default function GuidesPage() {
               {guide.type.replace("-", " ")}
             </span>
             <h2 className="mt-3 text-lg font-bold text-slate-900">{guide.title}</h2>
-            <p className="mt-1 text-sm text-slate-500">{guide.description}</p>
+            <p className="mt-1 text-sm text-slate-600">{guide.description}</p>
             <div className="mt-5">
               <GuideDownloadForm guideSlug={guide.slug} guideTitle={guide.title} />
             </div>

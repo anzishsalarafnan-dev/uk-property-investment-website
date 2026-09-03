@@ -13,7 +13,7 @@ export default function CitiesPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">UK Cities for Property Investment</h1>
-      <p className="mt-3 max-w-2xl text-slate-500">
+      <p className="mt-3 max-w-2xl text-slate-600">
         Compare average prices, rental yields, and 5-year growth projections across the UK&apos;s
         top investment cities, updated daily from live market data.
       </p>
@@ -28,18 +28,18 @@ export default function CitiesPage() {
             <div className="h-32 bg-gradient-to-br from-slate-800 to-slate-600" />
             <div className="p-5">
               <h2 className="text-lg font-bold text-slate-900">{city.name}</h2>
-              <p className="mt-1 text-sm text-slate-500">{city.tagline}</p>
+              <p className="mt-1 text-sm text-slate-600">{city.tagline}</p>
               <div className="mt-4 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center">
                 <div>
-                  <p className="text-xs text-slate-400">Avg. price</p>
+                  <p className="text-xs text-slate-500">Avg. price</p>
                   <p className="text-sm font-semibold text-slate-900">{formatGBP(city.avgPrice)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Yield</p>
+                  <p className="text-xs text-slate-500">Yield</p>
                   <p className="text-sm font-semibold text-emerald-600">{formatPercent(city.avgYield)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">Growth</p>
+                  <p className="text-xs text-slate-500">Growth</p>
                   <p className="text-sm font-semibold text-slate-900">{formatPercent(city.growthRate)}</p>
                 </div>
               </div>

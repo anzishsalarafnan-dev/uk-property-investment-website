@@ -19,7 +19,7 @@ export default function AreaTabs({ area }: { area: Area }) {
             className={`whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors ${
               active === tab
                 ? "border-b-2 border-slate-900 text-slate-900"
-                : "text-slate-500 hover:text-slate-800"
+                : "text-slate-600 hover:text-slate-800"
             }`}
           >
             {tab}
@@ -59,21 +59,21 @@ export default function AreaTabs({ area }: { area: Area }) {
         {active === "Amenities" && (
           <div className="grid max-w-md grid-cols-2 gap-4">
             <div className="rounded-lg bg-slate-50 p-4">
-              <p className="text-xs text-slate-400">Schools nearby</p>
+              <p className="text-xs text-slate-600">Schools nearby</p>
               <p className="text-lg font-semibold text-slate-900">{area.amenities.schools}</p>
             </div>
             <div className="rounded-lg bg-slate-50 p-4">
-              <p className="text-xs text-slate-400">Hospitals nearby</p>
+              <p className="text-xs text-slate-600">Hospitals nearby</p>
               <p className="text-lg font-semibold text-slate-900">{area.amenities.hospitals}</p>
             </div>
             <div className="col-span-2 rounded-lg bg-slate-50 p-4">
-              <p className="text-xs text-slate-400">Transport links</p>
+              <p className="text-xs text-slate-600">Transport links</p>
               <p className="text-sm font-medium text-slate-900">
                 {area.amenities.transport.join(", ")}
               </p>
             </div>
             <div className="col-span-2 rounded-lg bg-slate-50 p-4">
-              <p className="text-xs text-slate-400">Crime rate</p>
+              <p className="text-xs text-slate-600">Crime rate</p>
               <p className="text-sm font-medium text-slate-900">{area.amenities.crimeRate}</p>
             </div>
           </div>

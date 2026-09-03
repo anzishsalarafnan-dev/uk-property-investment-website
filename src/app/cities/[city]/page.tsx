@@ -67,7 +67,7 @@ export default async function CityDetailPage({ params }: Props) {
 
         <h2 className="mt-12 text-2xl font-bold text-slate-900">Areas in {city.name}</h2>
         {areas.length === 0 ? (
-          <p className="mt-4 text-slate-500">
+          <p className="mt-4 text-slate-600">
             Detailed area breakdowns for {city.name} are coming soon.
           </p>
         ) : (
@@ -85,11 +85,11 @@ export default async function CityDetailPage({ params }: Props) {
                   </span>
                 </div>
                 <div className="mt-3 flex justify-between text-sm">
-                  <span className="text-slate-500">1-bed from</span>
+                  <span className="text-slate-600">1-bed from</span>
                   <span className="font-semibold text-slate-900">{formatGBP(area.pricing.oneBed)}</span>
                 </div>
                 <div className="mt-1 flex justify-between text-sm">
-                  <span className="text-slate-500">Yield</span>
+                  <span className="text-slate-600">Yield</span>
                   <span className="font-semibold text-emerald-600">{formatPercent(area.rentalYield)}</span>
                 </div>
               </Link>

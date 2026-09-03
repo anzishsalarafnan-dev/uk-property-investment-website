@@ -118,22 +118,22 @@ export default function ValuationCalculator() {
 
       <div className="rounded-xl bg-slate-50 p-8">
         {!result ? (
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-600">
             Fill in the form to see your estimated property value based on live area data.
           </p>
         ) : (
           <div>
-            <p className="text-sm text-slate-500">Estimated value</p>
+            <p className="text-sm text-slate-600">Estimated value</p>
             <p className="mt-1 text-3xl font-bold text-slate-900">{formatGBP(result.medium)}</p>
             <div className="mt-4 flex justify-between text-sm">
-              <span className="text-slate-500">Low estimate</span>
+              <span className="text-slate-600">Low estimate</span>
               <span className="font-medium text-slate-900">{formatGBP(result.low)}</span>
             </div>
             <div className="mt-1 flex justify-between text-sm">
-              <span className="text-slate-500">High estimate</span>
+              <span className="text-slate-600">High estimate</span>
               <span className="font-medium text-slate-900">{formatGBP(result.high)}</span>
             </div>
-            <p className="mt-6 text-xs text-slate-400">
+            <p className="mt-6 text-xs text-slate-500">
               Estimate only, not a formal valuation. A detailed report has been sent to your email.
             </p>
           </div>
