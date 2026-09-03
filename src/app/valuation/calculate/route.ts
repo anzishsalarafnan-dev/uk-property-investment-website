@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateValuation } from "@/lib/market-data/valuation";
+import { supabaseAdmin } from "@/lib/database/client";
 
 const valuationSchema = z.object({
   propertyType: z.enum(["studio", "1-bed", "2-bed", "3-bed", "house"]),
@@ -21,15 +22,27 @@ export async function POST(request: Request) {
       );
     }
 
-    const { propertyType, condition, areaSlug } = parsed.data;
+    const { propertyType, condition, areaSlug, email } = parsed.data;
     const result = calculateValuation(areaSlug, propertyType, condition);
 
     if (!result) {
       return NextResponse.json({ error: "Area not found" }, { status: 404 });
     }
 
-    // TODO: save lead + email PDF via Resend/SendGrid.
-    console.log("New valuation request:", parsed.data, "-> result:", result);
+    const { error } = await supabaseAdmin()
+      .from("leads")
+      .insert({
+        name: email.split("@")[0],
+        email,
+        interested_area: areaSlug,
+        source: "valuation",
+        message: `Valuation requested: ${propertyType}, ${condition}. Result: £${result.low}-£${result.high}`,
+        score: 60,
+      });
+
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+    }
 
     return NextResponse.json({ success: true, result });
   } catch {

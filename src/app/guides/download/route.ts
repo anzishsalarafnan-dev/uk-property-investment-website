@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { supabaseAdmin } from "@/lib/database/client";
 
 const downloadSchema = z.object({
   name: z.string().min(2),
@@ -20,8 +21,23 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: save lead to database, score it, email PDF via Resend/SendGrid.
-    console.log("New guide download lead:", parsed.data);
+    const { name, email, whatsapp, guideSlug } = parsed.data;
+
+    const { error } = await supabaseAdmin()
+      .from("leads")
+      .insert({
+        name,
+        email,
+        whatsapp: whatsapp || null,
+        source: "guide-download",
+        message: `Downloaded guide: ${guideSlug}`,
+        score: 40,
+      });
+
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+      return NextResponse.json({ error: "Failed to save" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true });
   } catch {
