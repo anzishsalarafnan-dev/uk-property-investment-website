@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "london",
+    "name": "London",
+    "tagline": "Global capital, strongest long-term demand",
+    "heroImage": "/images/cities/london.jpg",
+    "population": 8982000,
+    "avgPrice": 542000,
+    "avgYield": 3.8,
+    "growthRate": 4.2,
+    "description": "London remains the UK's most liquid property market, driven by international demand, strong transport links, and constant regeneration across zones 2-4."
+  },
+  {
+    "slug": "manchester",
+    "name": "Manchester",
+    "tagline": "High rental yield, strong regeneration",
+    "heroImage": "/images/cities/manchester.jpg",
+    "population": 552000,
+    "avgPrice": 245000,
+    "avgYield": 6.2,
+    "growthRate": 6.8,
+    "description": "Manchester is the North's economic powerhouse, with major regeneration in the city centre and Salford Quays driving consistently strong rental yields."
+  },
+  {
+    "slug": "birmingham",
+    "name": "Birmingham",
+    "tagline": "Best for overseas investors",
+    "heroImage": "/images/cities/birmingham.jpg",
+    "population": 1145000,
+    "avgPrice": 232000,
+    "avgYield": 5.9,
+    "growthRate": 7.1,
+    "description": "Birmingham benefits from HS2 investment, a young population, and one of the UK's fastest-growing city centre rental markets."
+  },
+  {
+    "slug": "leeds",
+    "name": "Leeds",
+    "tagline": "Financial hub of the North",
+    "heroImage": "/images/cities/leeds.jpg",
+    "population": 812000,
+    "avgPrice": 218000,
+    "avgYield": 5.7,
+    "growthRate": 6.3,
+    "description": "Leeds has the largest financial and legal sector outside London, supporting steady tenant demand and city centre growth."
+  },
+  {
+    "slug": "liverpool",
+    "name": "Liverpool",
+    "tagline": "Highest yields in the UK",
+    "heroImage": "/images/cities/liverpool.jpg",
+    "population": 498000,
+    "avgPrice": 178000,
+    "avgYield": 7.4,
+    "growthRate": 5.9,
+    "description": "Liverpool consistently ranks among the UK's top yield cities, with affordable entry prices and a large student and young professional rental base."
+  },
+  {
+    "slug": "glasgow",
+    "name": "Glasgow",
+    "tagline": "Scotland's largest rental market",
+    "heroImage": "/images/cities/glasgow.jpg",
+    "population": 635000,
+    "avgPrice": 195000,
+    "avgYield": 6.5,
+    "growthRate": 5.4,
+    "description": "Glasgow offers strong rental demand driven by its universities and growing tech sector, with prices still well below UK city averages."
+  },
+  {
+    "slug": "bristol",
+    "name": "Bristol",
+    "tagline": "Tech hub with strong capital growth",
+    "heroImage": "/images/cities/bristol.jpg",
+    "population": 472000,
+    "avgPrice": 338000,
+    "avgYield": 4.6,
+    "growthRate": 5.8,
+    "description": "Bristol's booming tech and creative sectors have driven some of the strongest capital growth of any UK city outside London."
+  },
+  {
+    "slug": "edinburgh",
+    "name": "Edinburgh",
+    "tagline": "Stable capital growth, low void periods",
+    "heroImage": "/images/cities/edinburgh.jpg",
+    "population": 526000,
+    "avgPrice": 312000,
+    "avgYield": 4.9,
+    "growthRate": 5.1,
+    "description": "Edinburgh combines strong tourism, finance, and university sectors, resulting in some of the lowest rental void periods in the UK."
+  }
+]
