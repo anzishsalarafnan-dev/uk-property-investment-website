@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "uk-investment-guide-2026",
+    "title": "UK Property Investment Guide 2026",
+    "type": "special",
+    "description": "A complete overview of the UK property market for 2026, covering top cities, yields, and growth forecasts.",
+    "previewImages": ["/images/guides/uk-guide-2026-1.jpg"],
+    "pdfPath": "/documents/uk-investment-guide-2026.pdf"
+  },
+  {
+    "slug": "manchester-2026-guide",
+    "title": "Manchester 2026 Investment Guide",
+    "type": "city-guide",
+    "citySlug": "manchester",
+    "description": "Deep dive into Manchester's best areas, prices, yields, and regeneration projects.",
+    "previewImages": ["/images/guides/manchester-2026-1.jpg"],
+    "pdfPath": "/documents/manchester-2026-guide.pdf"
+  },
+  {
+    "slug": "birmingham-2026-guide",
+    "title": "Birmingham 2026 Investment Guide",
+    "type": "city-guide",
+    "citySlug": "birmingham",
+    "description": "Everything investors need to know about Birmingham's property market ahead of HS2 completion.",
+    "previewImages": ["/images/guides/birmingham-2026-1.jpg"],
+    "pdfPath": "/documents/birmingham-2026-guide.pdf"
+  },
+  {
+    "slug": "overseas-investor-guide",
+    "title": "Overseas Investors: How to Buy UK Property",
+    "type": "special",
+    "description": "A step-by-step guide for international buyers, covering legal process, financing, and tax.",
+    "previewImages": ["/images/guides/overseas-guide-1.jpg"],
+    "pdfPath": "/documents/overseas-investor-guide.pdf"
+  },
+  {
+    "slug": "first-time-buyer-checklist",
+    "title": "First-Time Investor Checklist",
+    "type": "special",
+    "description": "A practical checklist covering everything from budgeting to completion day.",
+    "previewImages": ["/images/guides/first-time-checklist-1.jpg"],
+    "pdfPath": "/documents/first-time-buyer-checklist.pdf"
+  }
+]
