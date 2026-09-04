@@ -44,7 +44,7 @@ export default function HomePage() {
             >
               <div className="relative h-28">
                 <Image
-                  src={getCityPhotoUrl(city.slug)}
+                  src={getCityPhotoUrl(city.slug, city.heroImage)}
                   alt={city.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 25vw"

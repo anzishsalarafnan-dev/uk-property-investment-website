@@ -38,7 +38,7 @@ export default async function CityDetailPage({ params }: Props) {
     <div>
       <section className="relative overflow-hidden py-16 text-white">
         <Image
-          src={getCityPhotoUrl(city.slug, 1600, 500)}
+          src={getCityPhotoUrl(city.slug, city.heroImage, 1600, 500)}
           alt={city.name}
           fill
           sizes="100vw"
