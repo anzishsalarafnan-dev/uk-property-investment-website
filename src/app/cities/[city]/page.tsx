@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import cities from "@/data/cities.json";
 import areasData from "@/data/areas.json";
+import Image from "next/image";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
+import { getCityPhotoUrl } from "@/lib/utils/images";
 
 type Props = { params: Promise<{ city: string }> };
 
@@ -34,8 +36,17 @@ export default async function CityDetailPage({ params }: Props) {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-slate-900 to-slate-700 py-16 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden py-16 text-white">
+        <Image
+          src={getCityPhotoUrl(city.slug, 1600, 500)}
+          alt={city.name}
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-slate-900/70" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link href="/cities" className="text-sm text-slate-300 hover:text-white">
             ← All Cities
           </Link>

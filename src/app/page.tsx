@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import cities from "@/data/cities.json";
+import { getCityPhotoUrl } from "@/lib/utils/images";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 
@@ -40,7 +42,15 @@ export default function HomePage() {
               href={`/cities/${city.slug}`}
               className="group overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition-all hover:-translate-y-1 hover:shadow-xl hover:ring-slate-300"
             >
-              <div className="h-28 bg-gradient-to-br from-slate-800 to-slate-600" />
+              <div className="relative h-28">
+                <Image
+                  src={getCityPhotoUrl(city.slug)}
+                  alt={city.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover"
+                />
+              </div>
               <div className="p-5">
                 <h3 className="text-lg font-bold text-slate-900">{city.name}</h3>
                 <p className="mt-1 text-sm text-slate-600">{city.tagline}</p>
