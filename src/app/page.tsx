@@ -1,6 +1,7 @@
 import Link from "next/link";
 import cities from "@/data/cities.json";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
+import NewsletterForm from "@/components/forms/NewsletterForm";
 
 export default function HomePage() {
   return (
@@ -58,6 +59,18 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-slate-900">Get Monthly UK Market Updates</h2>
+        <p className="mt-2 text-slate-600">
+          New area reports and market trends, straight to your inbox. No spam.
+        </p>
+        <div className="mt-6 flex justify-center">
+          <div className="w-full max-w-md">
+            <NewsletterForm />
+          </div>
         </div>
       </section>
     </div>
