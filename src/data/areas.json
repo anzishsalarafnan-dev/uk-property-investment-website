@@ -3,32 +3,478 @@
     "slug": "manchester-city-centre",
     "citySlug": "manchester",
     "name": "Manchester City Centre",
-    "images": ["/images/areas/manchester-city-centre-1.jpg"],
+    "images": [
+      "/images/areas/manchester-city-centre-1.jpg"
+    ],
     "investmentScore": 8.4,
-    "pricing": { "studio": 165000, "oneBed": 210000, "twoBed": 285000, "threeBed": 375000 },
+    "pricing": {
+      "studio": 165000,
+      "oneBed": 210000,
+      "twoBed": 285000,
+      "threeBed": 375000
+    },
     "rentalYield": 6.5,
     "growthProjection": 22.5,
     "lastUpdated": "2026-09-01",
     "overview": "Manchester City Centre is the epicentre of the North's regeneration, with new-build apartments driving strong rental demand from young professionals.",
-    "amenities": { "schools": 6, "hospitals": 2, "transport": ["Metrolink", "Piccadilly Station"], "crimeRate": "Medium" },
+    "amenities": {
+      "schools": 6,
+      "hospitals": 2,
+      "transport": [
+        "Metrolink",
+        "Piccadilly Station"
+      ],
+      "crimeRate": "Medium"
+    },
     "faqs": [
-      { "question": "Is Manchester City Centre good for investment?", "answer": "Yes, it offers some of the UK's highest yields (6-7%) driven by strong graduate and young professional rental demand." }
+      {
+        "question": "Is Manchester City Centre good for investment?",
+        "answer": "Yes, it offers some of the UK's highest yields (6-7%) driven by strong graduate and young professional rental demand."
+      }
     ]
   },
   {
     "slug": "digbeth",
     "citySlug": "birmingham",
     "name": "Digbeth",
-    "images": ["/images/areas/digbeth-1.jpg"],
+    "images": [
+      "/images/areas/digbeth-1.jpg"
+    ],
     "investmentScore": 8.1,
-    "pricing": { "studio": 145000, "oneBed": 185000, "twoBed": 255000, "threeBed": 330000 },
+    "pricing": {
+      "studio": 145000,
+      "oneBed": 185000,
+      "twoBed": 255000,
+      "threeBed": 330000
+    },
     "rentalYield": 6.1,
     "growthProjection": 24.0,
     "lastUpdated": "2026-09-01",
     "overview": "Digbeth is Birmingham's creative quarter, undergoing major regeneration with HS2's Curzon Street terminus on its doorstep.",
-    "amenities": { "schools": 4, "hospitals": 1, "transport": ["Bus routes", "Moor Street Station"], "crimeRate": "Medium" },
+    "amenities": {
+      "schools": 4,
+      "hospitals": 1,
+      "transport": [
+        "Bus routes",
+        "Moor Street Station"
+      ],
+      "crimeRate": "Medium"
+    },
     "faqs": [
-      { "question": "Is Digbeth good for investment?", "answer": "Digbeth is one of Birmingham's fastest-growing areas, driven by HS2 investment and its creative/tech scene." }
+      {
+        "question": "Is Digbeth good for investment?",
+        "answer": "Digbeth is one of Birmingham's fastest-growing areas, driven by HS2 investment and its creative/tech scene."
+      }
+    ]
+  },
+  {
+    "slug": "stratford",
+    "citySlug": "london",
+    "name": "Stratford",
+    "images": [
+      "/images/areas/stratford-1.jpg"
+    ],
+    "investmentScore": 8.2,
+    "pricing": {
+      "studio": 285000,
+      "oneBed": 385000,
+      "twoBed": 495000,
+      "threeBed": 620000
+    },
+    "rentalYield": 4.4,
+    "growthProjection": 18.5,
+    "lastUpdated": "2026-09-01",
+    "overview": "Stratford transformed by the 2012 Olympics, offers excellent transport links via the Elizabeth Line and continued regeneration around Queen Elizabeth Olympic Park.",
+    "amenities": {
+      "schools": 8,
+      "hospitals": 2,
+      "transport": [
+        "Elizabeth Line",
+        "Jubilee Line",
+        "DLR"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Stratford good for investment?",
+        "answer": "Yes, Stratford offers relatively affordable London prices with strong transport connectivity and ongoing regeneration."
+      }
+    ]
+  },
+  {
+    "slug": "canary-wharf",
+    "citySlug": "london",
+    "name": "Canary Wharf",
+    "images": [
+      "/images/areas/canary-wharf-1.jpg"
+    ],
+    "investmentScore": 7.8,
+    "pricing": {
+      "studio": 340000,
+      "oneBed": 445000,
+      "twoBed": 610000,
+      "threeBed": 780000
+    },
+    "rentalYield": 4.1,
+    "growthProjection": 14.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "London's second financial district, Canary Wharf attracts high-earning professional tenants and offers strong long-term capital security.",
+    "amenities": {
+      "schools": 4,
+      "hospitals": 1,
+      "transport": [
+        "Jubilee Line",
+        "DLR",
+        "Elizabeth Line"
+      ],
+      "crimeRate": "Low"
+    },
+    "faqs": [
+      {
+        "question": "Is Canary Wharf good for investment?",
+        "answer": "It offers stable, high-quality tenant demand from finance professionals, though yields are lower than emerging areas."
+      }
+    ]
+  },
+  {
+    "slug": "leeds-city-centre",
+    "citySlug": "leeds",
+    "name": "Leeds City Centre",
+    "images": [
+      "/images/areas/leeds-city-centre-1.jpg"
+    ],
+    "investmentScore": 8.0,
+    "pricing": {
+      "studio": 135000,
+      "oneBed": 175000,
+      "twoBed": 235000,
+      "threeBed": 310000
+    },
+    "rentalYield": 6.0,
+    "growthProjection": 21.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Leeds City Centre benefits from a strong graduate retention rate and the largest financial and legal sector outside London.",
+    "amenities": {
+      "schools": 5,
+      "hospitals": 2,
+      "transport": [
+        "Leeds Station",
+        "Bus network"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Leeds City Centre good for investment?",
+        "answer": "Yes, it offers strong yields driven by young professional and graduate rental demand."
+      }
+    ]
+  },
+  {
+    "slug": "headingley",
+    "citySlug": "leeds",
+    "name": "Headingley",
+    "images": [
+      "/images/areas/headingley-1.jpg"
+    ],
+    "investmentScore": 7.5,
+    "pricing": {
+      "studio": 120000,
+      "oneBed": 155000,
+      "twoBed": 210000,
+      "threeBed": 285000
+    },
+    "rentalYield": 6.8,
+    "growthProjection": 19.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Headingley is Leeds' premier student and young professional area, home to two major universities and consistent rental demand.",
+    "amenities": {
+      "schools": 6,
+      "hospitals": 1,
+      "transport": [
+        "Headingley Station",
+        "Bus routes"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Headingley good for investment?",
+        "answer": "Its large student population makes it one of the highest-yielding areas in Leeds."
+      }
+    ]
+  },
+  {
+    "slug": "liverpool-city-centre",
+    "citySlug": "liverpool",
+    "name": "Liverpool City Centre",
+    "images": [
+      "/images/areas/liverpool-city-centre-1.jpg"
+    ],
+    "investmentScore": 8.6,
+    "pricing": {
+      "studio": 95000,
+      "oneBed": 125000,
+      "twoBed": 175000,
+      "threeBed": 235000
+    },
+    "rentalYield": 7.8,
+    "growthProjection": 23.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Liverpool City Centre offers some of the UK's highest rental yields, driven by low entry prices and strong tenant demand from students and young professionals.",
+    "amenities": {
+      "schools": 4,
+      "hospitals": 2,
+      "transport": [
+        "Liverpool Lime Street",
+        "Merseyrail"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Liverpool City Centre good for investment?",
+        "answer": "Yes, it consistently ranks among the UK's top yield locations with affordable entry prices."
+      }
+    ]
+  },
+  {
+    "slug": "baltic-triangle",
+    "citySlug": "liverpool",
+    "name": "Baltic Triangle",
+    "images": [
+      "/images/areas/baltic-triangle-1.jpg"
+    ],
+    "investmentScore": 8.3,
+    "pricing": {
+      "studio": 105000,
+      "oneBed": 140000,
+      "twoBed": 190000,
+      "threeBed": 250000
+    },
+    "rentalYield": 7.2,
+    "growthProjection": 25.5,
+    "lastUpdated": "2026-09-01",
+    "overview": "Liverpool's creative and digital quarter, the Baltic Triangle has seen rapid regeneration and is popular with young professionals and creatives.",
+    "amenities": {
+      "schools": 2,
+      "hospitals": 1,
+      "transport": [
+        "Liverpool Central",
+        "Bus routes"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Baltic Triangle good for investment?",
+        "answer": "It has one of the fastest growth projections in Liverpool due to ongoing regeneration and creative-sector demand."
+      }
+    ]
+  },
+  {
+    "slug": "glasgow-city-centre",
+    "citySlug": "glasgow",
+    "name": "Glasgow City Centre",
+    "images": [
+      "/images/areas/glasgow-city-centre-1.jpg"
+    ],
+    "investmentScore": 7.9,
+    "pricing": {
+      "studio": 110000,
+      "oneBed": 145000,
+      "twoBed": 200000,
+      "threeBed": 270000
+    },
+    "rentalYield": 6.9,
+    "growthProjection": 18.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Glasgow City Centre combines strong university demand with a growing tech and finance sector, supporting steady rental growth.",
+    "amenities": {
+      "schools": 5,
+      "hospitals": 2,
+      "transport": [
+        "Glasgow Central",
+        "Subway"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Glasgow City Centre good for investment?",
+        "answer": "Yes, strong university and young professional demand supports consistently high rental yields."
+      }
+    ]
+  },
+  {
+    "slug": "west-end-glasgow",
+    "citySlug": "glasgow",
+    "name": "West End",
+    "images": [
+      "/images/areas/west-end-glasgow-1.jpg"
+    ],
+    "investmentScore": 7.6,
+    "pricing": {
+      "studio": 115000,
+      "oneBed": 150000,
+      "twoBed": 215000,
+      "threeBed": 290000
+    },
+    "rentalYield": 6.3,
+    "growthProjection": 16.5,
+    "lastUpdated": "2026-09-01",
+    "overview": "Glasgow's West End is known for its leafy streets, University of Glasgow, and strong appeal to both students and professionals.",
+    "amenities": {
+      "schools": 7,
+      "hospitals": 1,
+      "transport": [
+        "Subway",
+        "Bus routes"
+      ],
+      "crimeRate": "Low"
+    },
+    "faqs": [
+      {
+        "question": "Is the West End good for investment?",
+        "answer": "It offers a good balance of stable long-term tenants and steady capital growth in a desirable location."
+      }
+    ]
+  },
+  {
+    "slug": "bristol-city-centre",
+    "citySlug": "bristol",
+    "name": "Bristol City Centre",
+    "images": [
+      "/images/areas/bristol-city-centre-1.jpg"
+    ],
+    "investmentScore": 7.7,
+    "pricing": {
+      "studio": 195000,
+      "oneBed": 255000,
+      "twoBed": 340000,
+      "threeBed": 435000
+    },
+    "rentalYield": 5.0,
+    "growthProjection": 17.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Bristol City Centre benefits from the city's booming tech and creative industries, driving strong demand from high-earning young professionals.",
+    "amenities": {
+      "schools": 5,
+      "hospitals": 2,
+      "transport": [
+        "Bristol Temple Meads",
+        "Bus network"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Bristol City Centre good for investment?",
+        "answer": "It offers strong capital growth potential thanks to Bristol's thriving tech sector, though yields are moderate."
+      }
+    ]
+  },
+  {
+    "slug": "clifton",
+    "citySlug": "bristol",
+    "name": "Clifton",
+    "images": [
+      "/images/areas/clifton-1.jpg"
+    ],
+    "investmentScore": 7.3,
+    "pricing": {
+      "studio": 220000,
+      "oneBed": 290000,
+      "twoBed": 385000,
+      "threeBed": 495000
+    },
+    "rentalYield": 4.5,
+    "growthProjection": 15.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Clifton is one of Bristol's most desirable residential areas, known for Georgian architecture, top schools, and consistent long-term demand.",
+    "amenities": {
+      "schools": 9,
+      "hospitals": 1,
+      "transport": [
+        "Bus routes",
+        "Clifton Down Station"
+      ],
+      "crimeRate": "Low"
+    },
+    "faqs": [
+      {
+        "question": "Is Clifton good for investment?",
+        "answer": "Clifton suits investors prioritising capital security and long-term tenants over high rental yield."
+      }
+    ]
+  },
+  {
+    "slug": "edinburgh-city-centre",
+    "citySlug": "edinburgh",
+    "name": "Edinburgh City Centre",
+    "images": [
+      "/images/areas/edinburgh-city-centre-1.jpg"
+    ],
+    "investmentScore": 7.8,
+    "pricing": {
+      "studio": 195000,
+      "oneBed": 255000,
+      "twoBed": 345000,
+      "threeBed": 440000
+    },
+    "rentalYield": 5.2,
+    "growthProjection": 15.5,
+    "lastUpdated": "2026-09-01",
+    "overview": "Edinburgh City Centre benefits from year-round tourism, the Fringe Festival, and strong demand from finance and university sectors.",
+    "amenities": {
+      "schools": 6,
+      "hospitals": 2,
+      "transport": [
+        "Waverley Station",
+        "Trams"
+      ],
+      "crimeRate": "Low"
+    },
+    "faqs": [
+      {
+        "question": "Is Edinburgh City Centre good for investment?",
+        "answer": "Yes, low void periods and strong tourism demand make it a stable investment choice."
+      }
+    ]
+  },
+  {
+    "slug": "leith",
+    "citySlug": "edinburgh",
+    "name": "Leith",
+    "images": [
+      "/images/areas/leith-1.jpg"
+    ],
+    "investmentScore": 8.1,
+    "pricing": {
+      "studio": 155000,
+      "oneBed": 205000,
+      "twoBed": 280000,
+      "threeBed": 365000
+    },
+    "rentalYield": 5.8,
+    "growthProjection": 20.0,
+    "lastUpdated": "2026-09-01",
+    "overview": "Leith has undergone major regeneration with new tram links to the city centre, making it one of Edinburgh's fastest-growing areas.",
+    "amenities": {
+      "schools": 5,
+      "hospitals": 1,
+      "transport": [
+        "Trams",
+        "Bus routes"
+      ],
+      "crimeRate": "Medium"
+    },
+    "faqs": [
+      {
+        "question": "Is Leith good for investment?",
+        "answer": "New tram connectivity and ongoing waterfront regeneration make Leith one of Edinburgh's strongest growth areas."
+      }
     ]
   }
 ]
