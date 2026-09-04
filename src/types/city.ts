@@ -8,4 +8,6 @@ export interface City {
   avgYield: number;
   growthRate: number;
   description: string;
+  latitude: number;
+  longitude: number;
 }

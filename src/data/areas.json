@@ -31,7 +31,9 @@
         "question": "Is Manchester City Centre good for investment?",
         "answer": "Yes, it offers some of the UK's highest yields (6-7%) driven by strong graduate and young professional rental demand."
       }
-    ]
+    ],
+    "latitude": 53.4794,
+    "longitude": -2.2453
   },
   {
     "slug": "digbeth",
@@ -65,7 +67,9 @@
         "question": "Is Digbeth good for investment?",
         "answer": "Digbeth is one of Birmingham's fastest-growing areas, driven by HS2 investment and its creative/tech scene."
       }
-    ]
+    ],
+    "latitude": 52.4751,
+    "longitude": -1.8871
   },
   {
     "slug": "stratford",
@@ -100,7 +104,9 @@
         "question": "Is Stratford good for investment?",
         "answer": "Yes, Stratford offers relatively affordable London prices with strong transport connectivity and ongoing regeneration."
       }
-    ]
+    ],
+    "latitude": 51.5416,
+    "longitude": -0.0034
   },
   {
     "slug": "canary-wharf",
@@ -135,7 +141,9 @@
         "question": "Is Canary Wharf good for investment?",
         "answer": "It offers stable, high-quality tenant demand from finance professionals, though yields are lower than emerging areas."
       }
-    ]
+    ],
+    "latitude": 51.5054,
+    "longitude": -0.0235
   },
   {
     "slug": "leeds-city-centre",
@@ -169,7 +177,9 @@
         "question": "Is Leeds City Centre good for investment?",
         "answer": "Yes, it offers strong yields driven by young professional and graduate rental demand."
       }
-    ]
+    ],
+    "latitude": 53.7965,
+    "longitude": -1.5478
   },
   {
     "slug": "headingley",
@@ -203,7 +213,9 @@
         "question": "Is Headingley good for investment?",
         "answer": "Its large student population makes it one of the highest-yielding areas in Leeds."
       }
-    ]
+    ],
+    "latitude": 53.8175,
+    "longitude": -1.5766
   },
   {
     "slug": "liverpool-city-centre",
@@ -237,7 +249,9 @@
         "question": "Is Liverpool City Centre good for investment?",
         "answer": "Yes, it consistently ranks among the UK's top yield locations with affordable entry prices."
       }
-    ]
+    ],
+    "latitude": 53.4064,
+    "longitude": -2.9916
   },
   {
     "slug": "baltic-triangle",
@@ -271,7 +285,9 @@
         "question": "Is Baltic Triangle good for investment?",
         "answer": "It has one of the fastest growth projections in Liverpool due to ongoing regeneration and creative-sector demand."
       }
-    ]
+    ],
+    "latitude": 53.3923,
+    "longitude": -2.9805
   },
   {
     "slug": "glasgow-city-centre",
@@ -305,7 +321,9 @@
         "question": "Is Glasgow City Centre good for investment?",
         "answer": "Yes, strong university and young professional demand supports consistently high rental yields."
       }
-    ]
+    ],
+    "latitude": 55.8609,
+    "longitude": -4.2514
   },
   {
     "slug": "west-end-glasgow",
@@ -339,7 +357,9 @@
         "question": "Is the West End good for investment?",
         "answer": "It offers a good balance of stable long-term tenants and steady capital growth in a desirable location."
       }
-    ]
+    ],
+    "latitude": 55.8721,
+    "longitude": -4.2892
   },
   {
     "slug": "bristol-city-centre",
@@ -373,7 +393,9 @@
         "question": "Is Bristol City Centre good for investment?",
         "answer": "It offers strong capital growth potential thanks to Bristol's thriving tech sector, though yields are moderate."
       }
-    ]
+    ],
+    "latitude": 51.4536,
+    "longitude": -2.5911
   },
   {
     "slug": "clifton",
@@ -407,7 +429,9 @@
         "question": "Is Clifton good for investment?",
         "answer": "Clifton suits investors prioritising capital security and long-term tenants over high rental yield."
       }
-    ]
+    ],
+    "latitude": 51.462,
+    "longitude": -2.6183
   },
   {
     "slug": "edinburgh-city-centre",
@@ -441,7 +465,9 @@
         "question": "Is Edinburgh City Centre good for investment?",
         "answer": "Yes, low void periods and strong tourism demand make it a stable investment choice."
       }
-    ]
+    ],
+    "latitude": 55.9508,
+    "longitude": -3.1888
   },
   {
     "slug": "leith",
@@ -475,6 +501,8 @@
         "question": "Is Leith good for investment?",
         "answer": "New tram connectivity and ongoing waterfront regeneration make Leith one of Edinburgh's strongest growth areas."
       }
-    ]
+    ],
+    "latitude": 55.975,
+    "longitude": -3.1758
   }
 ]

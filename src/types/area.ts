@@ -23,4 +23,6 @@ export interface Area {
     crimeRate: string;
   };
   faqs: { question: string; answer: string }[];
+  latitude: number;
+  longitude: number;
 }
