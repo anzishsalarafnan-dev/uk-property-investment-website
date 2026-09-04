@@ -1,0 +1,40 @@
+name: Daily Market Data & Lead Scoring
+
+on:
+  schedule:
+    # Runs every day at 6:00 AM UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}  # allows manual trigger from GitHub UI
+
+jobs:
+  run-automations:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python-automation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Automation 1 — Market Data Fetcher
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python -m automation_1_market_data.main
+
+      - name: Run Automation 3 — Lead Scoring
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+        run: python -m automation_3_lead_scoring.main
