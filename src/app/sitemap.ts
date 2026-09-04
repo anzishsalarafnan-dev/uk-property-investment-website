@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import cities from "@/data/cities.json";
 import areas from "@/data/areas.json";
 import guides from "@/data/guides.json";
+import blogPosts from "@/data/blog-posts.json";
 import { SITE_URL } from "@/lib/utils/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -50,5 +51,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
-  return [...staticPages, ...cityPages, ...areaPages, ...guidePages];
+  const blogPages = blogPosts.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...cityPages, ...areaPages, ...guidePages, ...blogPages];
 }
