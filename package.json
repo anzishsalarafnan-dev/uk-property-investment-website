@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.9.1",
     "@supabase/supabase-js": "^2.115.0",
     "framer-motion": "^13.2.0",
+    "fuse.js": "^7.5.0",
     "iron-session": "^9.0.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.40.0",

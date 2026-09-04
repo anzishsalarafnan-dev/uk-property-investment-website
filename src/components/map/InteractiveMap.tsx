@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Link from "next/link";
 import L from "leaflet";
+import Fuse from "fuse.js";
 import cities from "@/data/cities.json";
 import areas from "@/data/areas.json";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
@@ -28,10 +29,28 @@ type SearchResult =
   | { type: "city"; data: (typeof cities)[number] }
   | { type: "area"; data: (typeof areas)[number] };
 
+const searchIndex: SearchResult[] = [
+  ...cities.map((c) => ({ type: "city" as const, data: c })),
+  ...areas.map((a) => ({ type: "area" as const, data: a })),
+];
+
+const fuse = new Fuse(searchIndex, {
+  keys: ["data.name"],
+  threshold: 0.3,
+  distance: 100,
+});
+
 function FlyToLocation({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) {
   const map = useMap();
-  map.flyTo([lat, lng], zoom, { duration: 1.2 });
+  useEffect(() => {
+    map.flyTo([lat, lng], zoom, { duration: 1.2 });
+  }, [lat, lng, zoom, map]);
   return null;
+}
+
+function getWhatsappUrl(name: string): string {
+  const message = "Hi, I am interested in investment opportunities in " + name + ". Can you tell me more?";
+  return "https://wa.me/?text=" + encodeURIComponent(message);
 }
 
 export default function InteractiveMap() {
@@ -39,18 +58,16 @@ export default function InteractiveMap() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<SearchResult | null>(null);
   const [flyTarget, setFlyTarget] = useState<{ lat: number; lng: number; zoom: number } | null>(null);
+  const [highlightIndex, setHighlightIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const suggestions = useMemo(() => {
-    if (query.trim().length < 2) return [];
-    const q = query.toLowerCase();
-    const cityMatches: SearchResult[] = cities
-      .filter((c) => c.name.toLowerCase().includes(q))
-      .map((c) => ({ type: "city", data: c }));
-    const areaMatches: SearchResult[] = areas
-      .filter((a) => a.name.toLowerCase().includes(q))
-      .map((a) => ({ type: "area", data: a }));
-    return [...cityMatches, ...areaMatches].slice(0, 8);
+    if (query.trim().length === 0) return [];
+    return fuse.search(query).slice(0, 8).map((r) => r.item);
+  }, [query]);
+
+  useEffect(() => {
+    setHighlightIndex(0);
   }, [query]);
 
   function selectResult(result: SearchResult) {
@@ -64,6 +81,23 @@ export default function InteractiveMap() {
     inputRef.current?.blur();
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (suggestions.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      selectResult(suggestions[highlightIndex]);
+    } else if (e.key === "Escape") {
+      setQuery("");
+      inputRef.current?.blur();
+    }
+  }
+
   return (
     <div>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -75,16 +109,18 @@ export default function InteractiveMap() {
               setQuery(e.target.value);
               setSelected(null);
             }}
-            placeholder="Search city or area (e.g., Manchester, Stratford)"
+            onKeyDown={handleKeyDown}
+            placeholder="Search any city or area"
             className="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm focus:border-slate-500 focus:outline-none"
           />
           {suggestions.length > 0 && !selected && (
-            <div className="absolute z-[1000] mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-slate-200">
-              {suggestions.map((s) => (
+            <div className="absolute z-[1000] mt-1 w-full overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-slate-200">
+              {suggestions.map((s, i) => (
                 <button
-                  key={`${s.type}-${s.data.slug}`}
+                  key={s.type + "-" + s.data.slug}
                   onClick={() => selectResult(s)}
-                  className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-slate-50"
+                  onMouseEnter={() => setHighlightIndex(i)}
+                  className={"flex w-full items-center justify-between px-4 py-2.5 text-left text-sm " + (i === highlightIndex ? "bg-slate-100" : "hover:bg-slate-50")}
                 >
                   <span className="font-medium text-slate-900">{s.data.name}</span>
                   <span className="text-xs text-slate-400">{s.type === "city" ? "City" : "Area"}</span>
@@ -97,17 +133,13 @@ export default function InteractiveMap() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowAreas(false)}
-            className={`rounded-md px-4 py-2.5 text-sm font-medium ${
-              !showAreas ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"
-            }`}
+            className={"rounded-md px-4 py-2.5 text-sm font-medium " + (!showAreas ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700")}
           >
             Cities
           </button>
           <button
             onClick={() => setShowAreas(true)}
-            className={`rounded-md px-4 py-2.5 text-sm font-medium ${
-              showAreas ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"
-            }`}
+            className={"rounded-md px-4 py-2.5 text-sm font-medium " + (showAreas ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700")}
           >
             Areas
           </button>
@@ -123,7 +155,7 @@ export default function InteractiveMap() {
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              attribution='&copy; OpenStreetMap contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
@@ -139,7 +171,7 @@ export default function InteractiveMap() {
                       <p className="font-bold text-slate-900">{city.name}</p>
                       <p className="mt-1 text-xs text-slate-500">{city.tagline}</p>
                       <Link
-                        href={`/cities/${city.slug}`}
+                        href={"/cities/" + city.slug}
                         className="mt-2 block rounded bg-slate-900 px-3 py-1.5 text-center text-xs font-semibold text-white"
                       >
                         View Details
@@ -157,7 +189,7 @@ export default function InteractiveMap() {
                       <p className="font-bold text-slate-900">{area.name}</p>
                       <p className="mt-1 text-xs text-slate-500">Score: {area.investmentScore}/10</p>
                       <Link
-                        href={`/cities/${area.citySlug}/${area.slug}`}
+                        href={"/cities/" + area.citySlug + "/" + area.slug}
                         className="mt-2 block rounded bg-slate-900 px-3 py-1.5 text-center text-xs font-semibold text-white"
                       >
                         View Details
@@ -170,11 +202,18 @@ export default function InteractiveMap() {
         </div>
 
         <div className="rounded-xl bg-slate-50 p-6">
-          {!selected ? (
-            <p className="text-sm text-slate-500">
-              Search for a city or area above, or click a marker on the map to see details here.
-            </p>
-          ) : selected.type === "city" ? (
+          {!selected && (
+            <div>
+              <p className="text-sm text-slate-500">
+                Search for a city or area above, or click a marker on the map to see details here.
+              </p>
+              <p className="mt-3 text-xs text-slate-400">
+                Tip: use arrow keys and Enter to navigate search results quickly.
+              </p>
+            </div>
+          )}
+
+          {selected && selected.type === "city" && (
             <div>
               <div className="h-32 rounded-lg bg-gradient-to-br from-slate-800 to-slate-600" />
               <h2 className="mt-4 text-xl font-bold text-slate-900">{selected.data.name}</h2>
@@ -194,14 +233,33 @@ export default function InteractiveMap() {
                 </div>
               </div>
               <p className="mt-4 text-sm text-slate-600">{selected.data.description}</p>
-              <Link
-                href={`/cities/${selected.data.slug}`}
-                className="mt-5 block rounded-md bg-slate-900 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-slate-700"
-              >
-                View Full Details
-              </Link>
+
+              <div className="mt-5 space-y-2">
+                <Link
+                  href={"/cities/" + selected.data.slug}
+                  className="block rounded-md bg-slate-900 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-slate-700"
+                >
+                  View Full Details
+                </Link>
+                <Link
+                  href="/valuation"
+                  className="block rounded-md border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-white"
+                >
+                  Get Instant Valuation
+                </Link>
+                  <a
+                  href={getWhatsappUrl(selected.data.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-md bg-emerald-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-emerald-700"
+                >
+                  WhatsApp an Agent
+                </a>
+              </div>
             </div>
-          ) : (
+          )}
+
+          {selected && selected.type === "area" && (
             <div>
               <div className="h-32 rounded-lg bg-gradient-to-br from-slate-800 to-slate-600" />
               <div className="mt-4 flex items-center justify-between">
@@ -225,12 +283,29 @@ export default function InteractiveMap() {
                 </div>
               </div>
               <p className="mt-4 text-sm text-slate-600">{selected.data.overview}</p>
-              <Link
-                href={`/cities/${selected.data.citySlug}/${selected.data.slug}`}
-                className="mt-5 block rounded-md bg-slate-900 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-slate-700"
-              >
-                View Full Details
-              </Link>
+
+              <div className="mt-5 space-y-2">
+                <Link
+                  href={"/cities/" + selected.data.citySlug + "/" + selected.data.slug}
+                  className="block rounded-md bg-slate-900 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-slate-700"
+                >
+                  View Full Details
+                </Link>
+                <Link
+                  href="/valuation"
+                  className="block rounded-md border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-white"
+                >
+                  Get Instant Valuation
+                </Link>
+                  <a
+                  href={getWhatsappUrl(selected.data.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-md bg-emerald-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-emerald-700"
+                >
+                  WhatsApp an Agent
+                </a>
+              </div>
             </div>
           )}
         </div>
