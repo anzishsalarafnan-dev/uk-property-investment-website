@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/database/client";
+import { sendEmail } from "@/lib/email/sender";
+import { contactConfirmationHtml } from "@/lib/email/templates/contact";
 
 const contactSchema = z.object({
   name: z.string().min(2),
@@ -37,6 +39,12 @@ export async function POST(request: Request) {
       console.error("Supabase insert error:", error.message);
       return NextResponse.json({ error: "Failed to save message" }, { status: 500 });
     }
+
+    await sendEmail({
+      to: email,
+      subject: "We've received your message",
+      html: contactConfirmationHtml(name),
+    });
 
     return NextResponse.json({ success: true });
   } catch {

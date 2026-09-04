@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/database/client";
+import { sendEmail } from "@/lib/email/sender";
+import { guideEmailHtml } from "@/lib/email/templates/guide";
+import guidesData from "@/data/guides.json";
 
 const downloadSchema = z.object({
   name: z.string().min(2),
@@ -38,6 +41,13 @@ export async function POST(request: Request) {
       console.error("Supabase insert error:", error.message);
       return NextResponse.json({ error: "Failed to save" }, { status: 500 });
     }
+
+    const guide = guidesData.find((g) => g.slug === guideSlug);
+    await sendEmail({
+      to: email,
+      subject: "Your Guide is Ready",
+      html: guideEmailHtml(guide?.title || guideSlug),
+    });
 
     return NextResponse.json({ success: true });
   } catch {

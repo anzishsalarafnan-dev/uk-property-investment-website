@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateValuation } from "@/lib/market-data/valuation";
 import { supabaseAdmin } from "@/lib/database/client";
+import { sendEmail } from "@/lib/email/sender";
+import { valuationEmailHtml } from "@/lib/email/templates/valuation";
+import areasData from "@/data/areas.json";
 
 const valuationSchema = z.object({
   propertyType: z.enum(["studio", "1-bed", "2-bed", "3-bed", "house"]),
@@ -43,6 +46,13 @@ export async function POST(request: Request) {
     if (error) {
       console.error("Supabase insert error:", error.message);
     }
+
+    const area = areasData.find((a) => a.slug === areaSlug);
+    await sendEmail({
+      to: email,
+      subject: "Your Property Valuation Estimate",
+      html: valuationEmailHtml(area?.name || areaSlug, result),
+    });
 
     return NextResponse.json({ success: true, result });
   } catch {
