@@ -10,6 +10,7 @@ const contactSchema = z.object({
   email: z.string().email("Enter a valid email"),
   subject: z.string().min(1, "Please select a subject"),
   message: z.string().min(10, "Message should be at least 10 characters"),
+  website: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -41,6 +42,14 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg space-y-4">
+      <input
+        type="text"
+        {...register("website")}
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
       <div>
         <label className="text-sm font-medium text-slate-700">Name</label>
         <input

@@ -9,6 +9,7 @@ const guideSchema = z.object({
   name: z.string().min(2, "Name is too short"),
   email: z.string().email("Enter a valid email"),
   whatsapp: z.string().optional(),
+  website: z.string().optional(),
 });
 
 type GuideFormData = z.infer<typeof guideSchema>;
@@ -46,6 +47,14 @@ export default function GuideDownloadForm({ guideSlug, guideTitle }: { guideSlug
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+      <input
+        type="text"
+        {...register("website")}
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
       <div>
         <input
           {...register("name")}

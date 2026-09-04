@@ -13,6 +13,7 @@ const valuationSchema = z.object({
   condition: z.enum(["good", "average", "needs-renovation"]),
   areaSlug: z.string().min(1, "Please select an area"),
   email: z.string().email("Enter a valid email"),
+  website: z.string().optional(),
 });
 
 type FormData = z.infer<typeof valuationSchema>;
@@ -47,6 +48,14 @@ export default function ValuationCalculator() {
   return (
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <input
+        type="text"
+        {...register("website")}
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        aria-hidden="true"
+      />
         <div>
           <label className="text-sm font-medium text-slate-700">Property type</label>
           <select

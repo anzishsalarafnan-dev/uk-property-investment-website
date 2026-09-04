@@ -4,19 +4,31 @@ import { supabaseAdmin } from "@/lib/database/client";
 import { sendEmail } from "@/lib/email/sender";
 import { guideEmailHtml } from "@/lib/email/templates/guide";
 import guidesData from "@/data/guides.json";
+import { isHoneypotTriggered } from "@/lib/security/honeypot";
+import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
 
 const downloadSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   whatsapp: z.string().optional(),
   guideSlug: z.string().min(1),
+  website: z.string().optional(),
 });
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const parsed = downloadSchema.safeParse(body);
+    const ip = getClientIp(request);
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 });
+    }
 
+    const body = await request.json();
+
+    if (isHoneypotTriggered(body.website)) {
+      return NextResponse.json({ success: true });
+    }
+
+    const parsed = downloadSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Invalid input", details: parsed.error.flatten() },

@@ -3,19 +3,32 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/lib/database/client";
 import { sendEmail } from "@/lib/email/sender";
 import { contactConfirmationHtml } from "@/lib/email/templates/contact";
+import { isHoneypotTriggered } from "@/lib/security/honeypot";
+import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
 
 const contactSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   subject: z.string().min(1),
   message: z.string().min(10),
+  website: z.string().optional(), // honeypot field
 });
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const parsed = contactSchema.safeParse(body);
+    const ip = getClientIp(request);
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 });
+    }
 
+    const body = await request.json();
+
+    if (isHoneypotTriggered(body.website)) {
+      // Silently pretend success so bots don't learn they were caught.
+      return NextResponse.json({ success: true });
+    }
+
+    const parsed = contactSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Invalid input", details: parsed.error.flatten() },
