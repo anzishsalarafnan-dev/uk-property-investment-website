@@ -1,9 +1,11 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import Image from "next/image";
-import cities from "@/data/cities.json";
+import type { Metadata } from "next";
+import { getAllCities } from "@/lib/database/content";
 import { getCityPhotoUrl } from "@/lib/utils/images";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "UK Cities for Property Investment",
@@ -11,7 +13,9 @@ export const metadata: Metadata = {
     "Compare prices, rental yields, and growth rates across 8 major UK cities for property investment.",
 };
 
-export default function CitiesPage() {
+export default async function CitiesPage() {
+  const cities = await getAllCities();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">UK Cities for Property Investment</h1>
@@ -41,15 +45,15 @@ export default function CitiesPage() {
               <p className="mt-1 text-sm text-slate-600">{city.tagline}</p>
               <div className="mt-4 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center">
                 <div>
-                  <p className="text-xs text-slate-500">Avg. price</p>
+                  <p className="text-xs text-slate-600">Avg. price</p>
                   <p className="text-sm font-semibold text-slate-900">{formatGBP(city.avgPrice)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">Yield</p>
+                  <p className="text-xs text-slate-600">Yield</p>
                   <p className="text-sm font-semibold text-emerald-600">{formatPercent(city.avgYield)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">Growth</p>
+                  <p className="text-xs text-slate-600">Growth</p>
                   <p className="text-sm font-semibold text-slate-900">{formatPercent(city.growthRate)}</p>
                 </div>
               </div>

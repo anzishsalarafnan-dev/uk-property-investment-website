@@ -1,26 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import cities from "@/data/cities.json";
-import areasData from "@/data/areas.json";
-import AreaTabs from "@/components/areas/AreaTabs";
-import Image from "next/image";
-import { formatGBP, formatPercent } from "@/lib/utils/format";
+import { getAllAreas, getCityBySlug, getAreaBySlug } from "@/lib/database/content";
 import { getAreaPhotoUrl } from "@/lib/utils/images";
+import AreaTabs from "@/components/areas/AreaTabs";
+import { formatGBP, formatPercent } from "@/lib/utils/format";
+
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ city: string; area: string }> };
 
-function getArea(citySlug: string, areaSlug: string) {
-  return areasData.find((a) => a.citySlug === citySlug && a.slug === areaSlug);
-}
-
 export async function generateStaticParams() {
-  return areasData.map((a) => ({ city: a.citySlug, area: a.slug }));
+  const areas = await getAllAreas();
+  return areas.map((a) => ({ city: a.citySlug, area: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city: citySlug, area: areaSlug } = await params;
-  const area = getArea(citySlug, areaSlug);
+  const area = await getAreaBySlug(citySlug, areaSlug);
   if (!area) return {};
   return {
     title: `${area.name} Property Investment 2026`,
@@ -30,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AreaDetailPage({ params }: Props) {
   const { city: citySlug, area: areaSlug } = await params;
-  const city = cities.find((c) => c.slug === citySlug);
-  const area = getArea(citySlug, areaSlug);
+  const city = await getCityBySlug(citySlug);
+  const area = await getAreaBySlug(citySlug, areaSlug);
   if (!city || !area) notFound();
 
   return (
