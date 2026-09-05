@@ -71,7 +71,47 @@ def run():
     supabase = get_supabase_client()
     migrate_cities(supabase)
     migrate_areas(supabase)
+    migrate_guides(supabase)
+    migrate_blog_posts(supabase)
     logger.info("Migration complete")
+
+
+
+
+
+def migrate_guides(supabase):
+    guides = load_json("guides.json")
+    rows = []
+    for g in guides:
+        rows.append({
+            "slug": g["slug"],
+            "title": g["title"],
+            "type": g["type"],
+            "city_slug": g.get("citySlug"),
+            "description": g.get("description"),
+            "preview_images": g.get("previewImages", []),
+            "pdf_path": g.get("pdfPath"),
+        })
+    supabase.table("guides").upsert(rows, on_conflict="slug").execute()
+    logger.success(f"Migrated {len(rows)} guides")
+
+
+def migrate_blog_posts(supabase):
+    posts = load_json("blog-posts.json")
+    rows = []
+    for p in posts:
+        rows.append({
+            "slug": p["slug"],
+            "title": p["title"],
+            "excerpt": p["excerpt"],
+            "content": p["content"],
+            "category": p["category"],
+            "author": p["author"],
+            "published_at": p["publishedAt"],
+            "read_time_minutes": p.get("readTimeMinutes"),
+        })
+    supabase.table("blog_posts").upsert(rows, on_conflict="slug").execute()
+    logger.success(f"Migrated {len(rows)} blog posts")
 
 
 if __name__ == "__main__":
