@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRecaptcha } from "@/lib/security/useRecaptcha";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name is too short"),
@@ -17,6 +18,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const { getToken } = useRecaptcha();
   const {
     register,
     handleSubmit,
@@ -27,10 +29,11 @@ export default function ContactForm() {
   async function onSubmit(data: ContactFormData) {
     setStatus("loading");
     try {
+      const recaptchaToken = await getToken("contact");
       const res = await fetch("/contact/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, recaptchaToken }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("success");

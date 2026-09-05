@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRecaptcha } from "@/lib/security/useRecaptcha";
 import type { Area } from "@/types/area";
 import { formatGBP } from "@/lib/utils/format";
 import type { ValuationResult } from "@/types/property";
@@ -21,6 +22,7 @@ type FormData = z.infer<typeof valuationSchema>;
 export default function ValuationCalculator({ areas }: { areas: Area[] }) {
   const [result, setResult] = useState<ValuationResult | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const { getToken } = useRecaptcha();
   const {
     register,
     handleSubmit,
@@ -31,10 +33,11 @@ export default function ValuationCalculator({ areas }: { areas: Area[] }) {
     setStatus("loading");
     setResult(null);
     try {
+      const recaptchaToken = await getToken("valuation");
       const res = await fetch("/valuation/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, recaptchaToken }),
       });
       if (!res.ok) throw new Error("Request failed");
       const json = await res.json();

@@ -6,6 +6,7 @@ import { sendEmail } from "@/lib/email/sender";
 import { guideEmailHtml } from "@/lib/email/templates/guide";
 import { isHoneypotTriggered } from "@/lib/security/honeypot";
 import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
+import { verifyRecaptcha } from "@/lib/security/recaptcha";
 
 const downloadSchema = z.object({
   name: z.string().min(2),
@@ -13,6 +14,7 @@ const downloadSchema = z.object({
   whatsapp: z.string().optional(),
   guideSlug: z.string().min(1),
   website: z.string().optional(),
+  recaptchaToken: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -34,6 +36,11 @@ export async function POST(request: Request) {
         { error: "Invalid input", details: parsed.error.flatten() },
         { status: 400 }
       );
+    }
+
+    const isHuman = await verifyRecaptcha(parsed.data.recaptchaToken || "");
+    if (!isHuman) {
+      return NextResponse.json({ error: "Verification failed" }, { status: 403 });
     }
 
     const { name, email, whatsapp, guideSlug } = parsed.data;

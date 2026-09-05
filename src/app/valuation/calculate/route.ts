@@ -7,6 +7,7 @@ import { sendEmail } from "@/lib/email/sender";
 import { valuationEmailHtml } from "@/lib/email/templates/valuation";
 import { isHoneypotTriggered } from "@/lib/security/honeypot";
 import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
+import { verifyRecaptcha } from "@/lib/security/recaptcha";
 
 const valuationSchema = z.object({
   propertyType: z.enum(["studio", "1-bed", "2-bed", "3-bed", "house"]),
@@ -14,6 +15,7 @@ const valuationSchema = z.object({
   areaSlug: z.string().min(1),
   email: z.string().email(),
   website: z.string().optional(),
+  recaptchaToken: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -35,6 +37,11 @@ export async function POST(request: Request) {
         { error: "Invalid input", details: parsed.error.flatten() },
         { status: 400 }
       );
+    }
+
+    const isHuman = await verifyRecaptcha(parsed.data.recaptchaToken || "");
+    if (!isHuman) {
+      return NextResponse.json({ error: "Verification failed" }, { status: 403 });
     }
 
     const { propertyType, condition, areaSlug, email } = parsed.data;

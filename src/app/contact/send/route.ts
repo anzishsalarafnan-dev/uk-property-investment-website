@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email/sender";
 import { contactConfirmationHtml } from "@/lib/email/templates/contact";
 import { isHoneypotTriggered } from "@/lib/security/honeypot";
 import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
+import { verifyRecaptcha } from "@/lib/security/recaptcha";
 
 const contactSchema = z.object({
   name: z.string().min(2),
@@ -12,6 +13,7 @@ const contactSchema = z.object({
   subject: z.string().min(1),
   message: z.string().min(10),
   website: z.string().optional(), // honeypot field
+  recaptchaToken: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -34,6 +36,11 @@ export async function POST(request: Request) {
         { error: "Invalid input", details: parsed.error.flatten() },
         { status: 400 }
       );
+    }
+
+    const isHuman = await verifyRecaptcha(parsed.data.recaptchaToken || "");
+    if (!isHuman) {
+      return NextResponse.json({ error: "Verification failed" }, { status: 403 });
     }
 
     const { name, email, subject, message } = parsed.data;

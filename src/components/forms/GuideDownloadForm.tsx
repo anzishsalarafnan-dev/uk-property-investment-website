@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRecaptcha } from "@/lib/security/useRecaptcha";
 
 const guideSchema = z.object({
   name: z.string().min(2, "Name is too short"),
@@ -16,6 +17,7 @@ type GuideFormData = z.infer<typeof guideSchema>;
 
 export default function GuideDownloadForm({ guideSlug, guideTitle }: { guideSlug: string; guideTitle: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const { getToken } = useRecaptcha();
   const {
     register,
     handleSubmit,
@@ -25,10 +27,11 @@ export default function GuideDownloadForm({ guideSlug, guideTitle }: { guideSlug
   async function onSubmit(data: GuideFormData) {
     setStatus("loading");
     try {
+      const recaptchaToken = await getToken("guide_download");
       const res = await fetch("/guides/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, guideSlug }),
+        body: JSON.stringify({ ...data, guideSlug, recaptchaToken }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("success");
