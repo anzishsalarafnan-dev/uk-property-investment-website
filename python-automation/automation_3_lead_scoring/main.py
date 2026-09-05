@@ -15,6 +15,7 @@ from loguru import logger
 from shared.database import get_supabase_client
 from shared.email import send_email
 from automation_3_lead_scoring.scoring import calculate_score, priority_label
+from automation_3_lead_scoring.followup import run as run_followup
 
 
 def run():
@@ -44,6 +45,8 @@ def run():
             logger.warning(f"  - {lead['name']} <{lead['email']}> — score {lead['score']} — source: {lead['source']}")
     else:
         logger.info("No high-priority leads in this batch")
+
+    run_followup()
 
     logger.info("Automation 3 complete")
 
