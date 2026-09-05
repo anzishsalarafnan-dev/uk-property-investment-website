@@ -29,7 +29,7 @@
     "slug": "birmingham",
     "name": "Birmingham",
     "tagline": "Best for overseas investors",
-    "heroImage": "/images/cities/birmingham.jpg",
+    "heroImage": "https://images.unsplash.com/photo-1583699419975-fca32d6c9659",
     "population": 1145000,
     "avgPrice": 232000,
     "avgYield": 5.9,
