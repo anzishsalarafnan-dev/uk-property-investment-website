@@ -14,6 +14,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="flex items-center justify-between border-b border-slate-200 pb-4">
         <div className="flex gap-6">
           <Link href="/admin" className="text-sm font-semibold text-slate-900">Leads</Link>
+          <Link href="/admin/cities" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Cities</Link>
+          <Link href="/admin/areas" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Areas</Link>
         </div>
         <form action="/api/auth/logout" method="POST">
           <button
@@ -23,7 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               s.destroy();
               redirect("/login");
             }}
-            className="text-sm font-medium text-slate-500 hover:text-slate-900"
+            className="text-sm font-medium text-slate-600 hover:text-slate-900"
           >
             Sign out
           </button>
