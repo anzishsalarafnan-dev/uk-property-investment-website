@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import cities from "@/data/cities.json";
-import areas from "@/data/areas.json";
 import guides from "@/data/guides.json";
 import blogPosts from "@/data/blog-posts.json";
+import { getAllCities, getAllAreas } from "@/lib/database/content";
 import { SITE_URL } from "@/lib/utils/constants";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [cities, areas] = await Promise.all([getAllCities(), getAllAreas()]);
+
   const staticPages = [
     "",
     "/cities",
