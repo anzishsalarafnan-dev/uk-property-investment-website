@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/database/client";
+import { getGuideBySlug } from "@/lib/database/content";
 import { sendEmail } from "@/lib/email/sender";
 import { guideEmailHtml } from "@/lib/email/templates/guide";
-import guidesData from "@/data/guides.json";
 import { isHoneypotTriggered } from "@/lib/security/honeypot";
 import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
 
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to save" }, { status: 500 });
     }
 
-    const guide = guidesData.find((g) => g.slug === guideSlug);
+    const guide = await getGuideBySlug(guideSlug);
     await sendEmail({
       to: email,
       subject: "Your Guide is Ready",

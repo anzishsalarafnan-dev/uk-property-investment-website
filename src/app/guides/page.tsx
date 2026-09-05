@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import guides from "@/data/guides.json";
+import { getAllGuides } from "@/lib/database/content";
 import GuideDownloadForm from "@/components/forms/GuideDownloadForm";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Free UK Property Investment Guides",
   description: "Download free city guides, area reports, and investor checklists for UK property investment.",
 };
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const guides = await getAllGuides();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">Free Investment Guides</h1>

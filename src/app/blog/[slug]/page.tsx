@@ -1,21 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import posts from "@/data/blog-posts.json";
+import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/database/content";
+
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ slug: string }> };
 
-function getPost(slug: string) {
-  return posts.find((p) => p.slug === slug);
-}
-
 export async function generateStaticParams() {
+  const posts = await getAllBlogPosts();
   return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return {};
   return {
     title: post.title,
@@ -25,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
   const paragraphs = post.content.split("\n\n");
@@ -46,7 +45,7 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
-      <Link href="/blog" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/blog" className="text-sm text-slate-600 hover:text-slate-900">
         ← All Posts
       </Link>
 
@@ -54,7 +53,7 @@ export default async function BlogPostPage({ params }: Props) {
         {post.category}
       </span>
       <h1 className="mt-3 text-3xl font-bold text-slate-900">{post.title}</h1>
-      <div className="mt-3 flex items-center gap-3 text-sm text-slate-500">
+      <div className="mt-3 flex items-center gap-3 text-sm text-slate-600">
         <span>By {post.author}</span>
         <span>•</span>
         <span>{new Date(post.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
