@@ -1,4 +1,4 @@
-import areasData from "@/data/areas.json";
+import type { Area } from "@/types/area";
 import type { PropertyType, PropertyCondition, ValuationResult } from "@/types/property";
 
 const CONDITION_MULTIPLIER: Record<PropertyCondition, number> = {
@@ -7,7 +7,7 @@ const CONDITION_MULTIPLIER: Record<PropertyCondition, number> = {
   "needs-renovation": 0.88,
 };
 
-const TYPE_KEY_MAP: Record<PropertyType, keyof (typeof areasData)[number]["pricing"]> = {
+const TYPE_KEY_MAP: Record<PropertyType, keyof Area["pricing"]> = {
   studio: "studio",
   "1-bed": "oneBed",
   "2-bed": "twoBed",
@@ -16,13 +16,10 @@ const TYPE_KEY_MAP: Record<PropertyType, keyof (typeof areasData)[number]["prici
 };
 
 export function calculateValuation(
-  areaSlug: string,
+  area: Area,
   propertyType: PropertyType,
   condition: PropertyCondition
-): ValuationResult | null {
-  const area = areasData.find((a) => a.slug === areaSlug);
-  if (!area) return null;
-
+): ValuationResult {
   const basePrice = area.pricing[TYPE_KEY_MAP[propertyType]];
   const adjusted = basePrice * CONDITION_MULTIPLIER[condition];
 
@@ -30,7 +27,7 @@ export function calculateValuation(
     low: Math.round(adjusted * 0.93),
     medium: Math.round(adjusted),
     high: Math.round(adjusted * 1.07),
-    areaSlug,
+    areaSlug: area.slug,
     generatedAt: new Date().toISOString(),
   };
 }

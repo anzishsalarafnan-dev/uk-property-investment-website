@@ -83,3 +83,9 @@ export async function getAreaBySlug(citySlug: string, areaSlug: string): Promise
   if (error || !data) return null;
   return mapArea(data);
 }
+
+export async function getAreaBySlugOnly(areaSlug: string): Promise<Area | null> {
+  const { data, error } = await supabase.from("areas").select("*").eq("slug", areaSlug).single();
+  if (error || !data) return null;
+  return mapArea(data);
+}

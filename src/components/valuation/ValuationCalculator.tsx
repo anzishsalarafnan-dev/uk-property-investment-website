@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import areasData from "@/data/areas.json";
+import type { Area } from "@/types/area";
 import { formatGBP } from "@/lib/utils/format";
 import type { ValuationResult } from "@/types/property";
 
@@ -18,7 +18,7 @@ const valuationSchema = z.object({
 
 type FormData = z.infer<typeof valuationSchema>;
 
-export default function ValuationCalculator() {
+export default function ValuationCalculator({ areas }: { areas: Area[] }) {
   const [result, setResult] = useState<ValuationResult | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const {
@@ -96,7 +96,7 @@ export default function ValuationCalculator() {
             className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
           >
             <option value="" disabled>Select area</option>
-            {areasData.map((a) => (
+            {areas.map((a) => (
               <option key={a.slug} value={a.slug}>{a.name}</option>
             ))}
           </select>

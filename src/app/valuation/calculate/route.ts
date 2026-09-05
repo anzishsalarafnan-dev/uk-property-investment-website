@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateValuation } from "@/lib/market-data/valuation";
 import { supabaseAdmin } from "@/lib/database/client";
+import { getAreaBySlugOnly } from "@/lib/database/content";
 import { sendEmail } from "@/lib/email/sender";
 import { valuationEmailHtml } from "@/lib/email/templates/valuation";
-import areasData from "@/data/areas.json";
 import { isHoneypotTriggered } from "@/lib/security/honeypot";
 import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
 
@@ -38,11 +38,13 @@ export async function POST(request: Request) {
     }
 
     const { propertyType, condition, areaSlug, email } = parsed.data;
-    const result = calculateValuation(areaSlug, propertyType, condition);
+    const area = await getAreaBySlugOnly(areaSlug);
 
-    if (!result) {
+    if (!area) {
       return NextResponse.json({ error: "Area not found" }, { status: 404 });
     }
+
+    const result = calculateValuation(area, propertyType, condition);
 
     const { error } = await supabaseAdmin()
       .from("leads")
@@ -59,11 +61,10 @@ export async function POST(request: Request) {
       console.error("Supabase insert error:", error.message);
     }
 
-    const area = areasData.find((a) => a.slug === areaSlug);
     await sendEmail({
       to: email,
       subject: "Your Property Valuation Estimate",
-      html: valuationEmailHtml(area?.name || areaSlug, result),
+      html: valuationEmailHtml(area.name, result),
     });
 
     return NextResponse.json({ success: true, result });

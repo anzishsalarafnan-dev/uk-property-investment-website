@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import { getAllAreas } from "@/lib/database/content";
 import ValuationCalculator from "@/components/valuation/ValuationCalculator";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Instant Property Valuation",
   description: "Get an instant, free estimate of your UK property's value based on live market data.",
 };
 
-export default function ValuationPage() {
+export default async function ValuationPage() {
+  const areas = await getAllAreas();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">Instant Property Valuation</h1>
@@ -15,7 +20,7 @@ export default function ValuationPage() {
         market data. A full report will be emailed to you.
       </p>
       <div className="mt-10">
-        <ValuationCalculator />
+        <ValuationCalculator areas={areas} />
       </div>
     </div>
   );
