@@ -5,9 +5,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Link from "next/link";
 import L from "leaflet";
 import Fuse from "fuse.js";
-import cities from "@/data/cities.json";
-import areas from "@/data/areas.json";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
+import type { City } from "@/types/city";
+import type { Area } from "@/types/area";
 
 const cityIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -26,19 +26,9 @@ const areaIcon = new L.Icon({
 });
 
 type SearchResult =
-  | { type: "city"; data: (typeof cities)[number] }
-  | { type: "area"; data: (typeof areas)[number] };
+  | { type: "city"; data: City }
+  | { type: "area"; data: Area };
 
-const searchIndex: SearchResult[] = [
-  ...cities.map((c) => ({ type: "city" as const, data: c })),
-  ...areas.map((a) => ({ type: "area" as const, data: a })),
-];
-
-const fuse = new Fuse(searchIndex, {
-  keys: ["data.name"],
-  threshold: 0.3,
-  distance: 100,
-});
 
 function FlyToLocation({ lat, lng, zoom }: { lat: number; lng: number; zoom: number }) {
   const map = useMap();
@@ -53,7 +43,7 @@ function getWhatsappUrl(name: string): string {
   return "https://wa.me/?text=" + encodeURIComponent(message);
 }
 
-export default function InteractiveMap() {
+export default function InteractiveMap({ cities, areas }: { cities: City[]; areas: Area[] }) {
   const [showAreas, setShowAreas] = useState(true);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<SearchResult | null>(null);
@@ -61,10 +51,18 @@ export default function InteractiveMap() {
   const [highlightIndex, setHighlightIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const fuse = useMemo(() => {
+    const searchIndex: SearchResult[] = [
+      ...cities.map((c) => ({ type: "city" as const, data: c })),
+      ...areas.map((a) => ({ type: "area" as const, data: a })),
+    ];
+    return new Fuse(searchIndex, { keys: ["data.name"], threshold: 0.3, distance: 100 });
+  }, [cities, areas]);
+
   const suggestions = useMemo(() => {
     if (query.trim().length === 0) return [];
     return fuse.search(query).slice(0, 8).map((r) => r.item);
-  }, [query]);
+  }, [query, fuse]);
 
   useEffect(() => {
     setHighlightIndex(0);

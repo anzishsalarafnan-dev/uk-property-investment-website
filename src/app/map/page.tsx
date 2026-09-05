@@ -1,17 +1,11 @@
-"use client";
+import { getAllCities, getAllAreas } from "@/lib/database/content";
+import MapLoader from "@/components/map/MapLoader";
 
-import dynamic from "next/dynamic";
+export const revalidate = 3600;
 
-const InteractiveMap = dynamic(() => import("@/components/map/InteractiveMap"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-[600px] items-center justify-center rounded-xl bg-slate-50 text-slate-400">
-      Loading map...
-    </div>
-  ),
-});
+export default async function MapPage() {
+  const [cities, areas] = await Promise.all([getAllCities(), getAllAreas()]);
 
-export default function MapPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-slate-900">Explore on the Map</h1>
@@ -20,7 +14,7 @@ export default function MapPage() {
         details.
       </p>
       <div className="mt-10">
-        <InteractiveMap />
+        <MapLoader cities={cities} areas={areas} />
       </div>
     </div>
   );
