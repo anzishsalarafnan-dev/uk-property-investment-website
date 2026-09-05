@@ -1,11 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import cities from "@/data/cities.json";
+import { getAllCities } from "@/lib/database/content";
 import { getCityPhotoUrl } from "@/lib/utils/images";
 import { formatGBP, formatPercent } from "@/lib/utils/format";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 
-export default function HomePage() {
+export const revalidate = 3600; // re-fetch from DB at most once per hour
+
+export default async function HomePage() {
+  const cities = await getAllCities();
+
   return (
     <div>
       <section className="bg-slate-900 py-20 text-white sm:py-28">
