@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM = process.env.EMAIL_FROM || "onboarding@resend.dev";
 
 export async function sendEmail({
@@ -12,7 +12,13 @@ export async function sendEmail({
   subject: string;
   html: string;
 }) {
+  if (!RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY not configured — skipping email send.");
+    return { success: false, error: "Email not configured" };
+  }
+
   try {
+    const resend = new Resend(RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from: FROM,
       to,
