@@ -7,6 +7,7 @@ const settingsSchema = z.object({
   contact_email: z.string().email().or(z.literal("")),
   contact_phone: z.string(),
   whatsapp_number: z.string(),
+  theme_mode: z.enum(["light", "dark"]),
 });
 
 export async function PATCH(request: Request) {

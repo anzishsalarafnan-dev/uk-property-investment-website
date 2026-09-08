@@ -7,6 +7,7 @@ export default function SettingsForm({ settings }: { settings: Record<string, st
     contact_email: settings.contact_email || "",
     contact_phone: settings.contact_phone || "",
     whatsapp_number: settings.whatsapp_number || "",
+    theme_mode: settings.theme_mode || "light",
   });
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
@@ -18,11 +19,37 @@ export default function SettingsForm({ settings }: { settings: Record<string, st
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    setStatus(res.ok ? "saved" : "error");
+    if (res.ok) {
+      setStatus("saved");
+      window.location.reload();
+    } else {
+      setStatus("error");
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <div>
+        <label className="text-sm font-medium text-slate-700">Site theme</label>
+        <div className="mt-2 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setForm({ ...form, theme_mode: "light" })}
+            className={`rounded-md px-4 py-2 text-sm font-medium ${form.theme_mode === "light" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"}`}
+          >
+            ☀️ Light
+          </button>
+          <button
+            type="button"
+            onClick={() => setForm({ ...form, theme_mode: "dark" })}
+            className={`rounded-md px-4 py-2 text-sm font-medium ${form.theme_mode === "dark" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"}`}
+          >
+            🌙 Dark
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-slate-500">Applies to the whole public site for all visitors.</p>
+      </div>
+
       <div>
         <label className="text-sm font-medium text-slate-700">Contact email</label>
         <input
