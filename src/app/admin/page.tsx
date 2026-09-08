@@ -1,57 +1,55 @@
+import Link from "next/link";
 import { supabaseAdmin } from "@/lib/database/client";
+import { getAllCities, getAllAreas, getAllGuides, getAllBlogPosts } from "@/lib/database/content";
 
-export default async function AdminLeadsPage() {
-  const { data: leads, error } = await supabaseAdmin()
-    .from("leads")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(100);
+export default async function AdminOverviewPage() {
+  const [leadsResult, cities, areas, guides, blogPosts] = await Promise.all([
+    supabaseAdmin().from("leads").select("*", { count: "exact", head: true }),
+    getAllCities(),
+    getAllAreas(),
+    getAllGuides(),
+    getAllBlogPosts(),
+  ]);
+
+  const stats = [
+    { label: "Total Leads", value: leadsResult.count ?? 0, href: "/admin/leads" },
+    { label: "Cities", value: cities.length, href: "/admin/cities" },
+    { label: "Areas", value: areas.length, href: "/admin/areas" },
+    { label: "Guides", value: guides.length, href: "/admin/guides" },
+    { label: "Blog Posts", value: blogPosts.length, href: "/admin/blog" },
+  ];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Leads</h1>
-      <p className="mt-1 text-sm text-slate-600">
-        {leads ? `${leads.length} most recent leads` : "Unable to load leads"}
-      </p>
+      <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+      <p className="mt-1 text-sm text-slate-600">Overview of your site content and activity.</p>
 
-      {error && (
-        <p className="mt-4 rounded-md bg-red-50 p-4 text-sm text-red-700">{error.message}</p>
-      )}
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {stats.map((stat) => (
+          <Link
+            key={stat.label}
+            href={stat.href}
+            className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+            <p className="mt-1 text-sm text-slate-600">{stat.label}</p>
+          </Link>
+        ))}
+      </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50">
-            <tr>
-              <th className="px-4 py-3 font-semibold text-slate-700">Name</th>
-              <th className="px-4 py-3 font-semibold text-slate-700">Email</th>
-              <th className="px-4 py-3 font-semibold text-slate-700">Source</th>
-              <th className="px-4 py-3 font-semibold text-slate-700">Score</th>
-              <th className="px-4 py-3 font-semibold text-slate-700">Message</th>
-              <th className="px-4 py-3 font-semibold text-slate-700">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads?.map((lead) => (
-              <tr key={lead.id} className="border-b border-slate-100 last:border-0">
-                <td className="px-4 py-3 font-medium text-slate-900">{lead.name}</td>
-                <td className="px-4 py-3 text-slate-600">{lead.email}</td>
-                <td className="px-4 py-3">
-                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
-                    {lead.source}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-slate-600">{lead.score}</td>
-                <td className="px-4 py-3 max-w-xs truncate text-slate-600">{lead.message}</td>
-                <td className="px-4 py-3 whitespace-nowrap text-slate-500">
-                  {new Date(lead.created_at).toLocaleString("en-GB")}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {leads?.length === 0 && (
-          <p className="px-4 py-8 text-center text-sm text-slate-500">No leads yet.</p>
-        )}
+      <div className="mt-10 rounded-xl bg-slate-50 p-6">
+        <h2 className="font-semibold text-slate-900">Quick Links</h2>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href="/admin/leads" className="rounded-md bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100">
+            View Leads
+          </Link>
+          <Link href="/admin/settings" className="rounded-md bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100">
+            Site Settings
+          </Link>
+          <Link href="/" target="_blank" className="rounded-md bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100">
+            View Live Site
+          </Link>
+        </div>
       </div>
     </div>
   );

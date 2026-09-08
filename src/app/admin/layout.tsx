@@ -11,11 +11,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-        <div className="flex gap-6">
-          <Link href="/admin" className="text-sm font-semibold text-slate-900">Leads</Link>
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div className="flex flex-wrap gap-6">
+          <Link href="/admin" className="text-sm font-semibold text-slate-900">Dashboard</Link>
+          <Link href="/admin/leads" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Leads</Link>
           <Link href="/admin/cities" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Cities</Link>
           <Link href="/admin/areas" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Areas</Link>
+          <Link href="/admin/settings" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Settings</Link>
         </div>
         <form action="/api/auth/logout" method="POST">
           <button

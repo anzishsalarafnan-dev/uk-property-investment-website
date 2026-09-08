@@ -148,3 +148,16 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   if (error || !data) return null;
   return mapBlogPost(data);
 }
+
+export async function getAllSettings(): Promise<Record<string, string>> {
+  const { data, error } = await supabase.from("site_settings").select("*");
+  if (error) {
+    console.error("getAllSettings error:", error.message);
+    return {};
+  }
+  const map: Record<string, string> = {};
+  (data || []).forEach((row: any) => {
+    map[row.key] = row.value;
+  });
+  return map;
+}
