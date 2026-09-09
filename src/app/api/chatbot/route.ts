@@ -6,6 +6,7 @@ import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
 
 const chatSchema = z.object({
   message: z.string().min(1).max(1000),
+  language: z.string().optional(),
   history: z
     .array(z.object({ role: z.enum(["user", "model"]), text: z.string() }))
     .optional()
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const { message, history } = parsed.data;
+    const { message, history, language } = parsed.data;
     const context = await retrieveContext(message);
 
     const model = getGeminiModel();
@@ -53,7 +54,8 @@ export async function POST(request: Request) {
       ],
     });
 
-    const prompt = `Context data from our website:\n${context}\n\nUser question: ${message}`;
+    const languageNote = language ? `\n\n(Respond in this language: ${language})` : "";
+    const prompt = `Context data from our website:\n${context}\n\nUser question: ${message}${languageNote}`;
     const result = await chat.sendMessage(prompt);
     const responseText = result.response.text();
 

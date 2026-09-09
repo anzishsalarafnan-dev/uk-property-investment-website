@@ -14,7 +14,7 @@ export function useVoice() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const recognitionRef = useRef<any>(null);
 
-  const startListening = useCallback((onResult: (text: string) => void) => {
+  const startListening = useCallback((lang: string, onResult: (text: string) => void) => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Voice input isn't supported in this browser. Try Chrome.");
@@ -24,7 +24,7 @@ export function useVoice() {
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = false;
-    recognition.lang = "en-US"; // auto-detects most languages reasonably well in practice
+    recognition.lang = lang;
 
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
@@ -43,10 +43,23 @@ export function useVoice() {
     recognitionRef.current?.stop();
   }, []);
 
-  const speak = useCallback((text: string) => {
+  const speak = useCallback((text: string, lang: string) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
+
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const langPrefix = lang.split("-")[0];
+    const matchingVoice =
+      voices.find((v) => v.lang === lang) ||
+      voices.find((v) => v.lang.startsWith(langPrefix)) ||
+      null;
+    if (matchingVoice) utterance.voice = matchingVoice;
+
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
