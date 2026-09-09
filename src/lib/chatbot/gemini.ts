@@ -8,7 +8,7 @@ export function getGeminiModel() {
   }
   const genAI = new GoogleGenerativeAI(apiKey);
   return genAI.getGenerativeModel({
-    model: "gemini-3.6-flash-lite",
+    model: "gemini-flash-lite-latest",
     generationConfig: {
       maxOutputTokens: 200,
       temperature: 0.4,
