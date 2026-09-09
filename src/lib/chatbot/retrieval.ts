@@ -1,14 +1,20 @@
 import { getAllCities, getAllAreas, getAllGuides, getAllBlogPosts } from "@/lib/database/content";
 
-/**
- * Simple keyword-based retrieval: finds cities/areas/guides/blog posts
- * whose name or content matches words from the user's question, and
- * returns them as context text for the AI to answer from — this keeps
- * answers grounded in real site data instead of the model inventing facts.
- */
-export async function retrieveContext(query: string): Promise<string> {
-  const q = query.toLowerCase();
-  const words = q.split(/\s+/).filter((w) => w.length > 2);
+type CachedData = {
+  cities: Awaited<ReturnType<typeof getAllCities>>;
+  areas: Awaited<ReturnType<typeof getAllAreas>>;
+  guides: Awaited<ReturnType<typeof getAllGuides>>;
+  blogPosts: Awaited<ReturnType<typeof getAllBlogPosts>>;
+  fetchedAt: number;
+};
+
+let cache: CachedData | null = null;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes — content rarely changes minute-to-minute
+
+async function getData(): Promise<CachedData> {
+  if (cache && Date.now() - cache.fetchedAt < CACHE_TTL_MS) {
+    return cache;
+  }
 
   const [cities, areas, guides, blogPosts] = await Promise.all([
     getAllCities(),
@@ -16,6 +22,24 @@ export async function retrieveContext(query: string): Promise<string> {
     getAllGuides(),
     getAllBlogPosts(),
   ]);
+
+  cache = { cities, areas, guides, blogPosts, fetchedAt: Date.now() };
+  return cache;
+}
+
+/**
+ * Simple keyword-based retrieval: finds cities/areas/guides/blog posts
+ * whose name or content matches words from the user's question, and
+ * returns them as context text for the AI to answer from — this keeps
+ * answers grounded in real site data instead of the model inventing facts.
+ * Data is cached in-memory for 5 minutes to avoid a slow database round
+ * trip on every single chat message.
+ */
+export async function retrieveContext(query: string): Promise<string> {
+  const q = query.toLowerCase();
+  const words = q.split(/\s+/).filter((w) => w.length > 2);
+
+  const { cities, areas, guides, blogPosts } = await getData();
 
   const matches = (text: string) => words.some((w) => text.toLowerCase().includes(w));
 
