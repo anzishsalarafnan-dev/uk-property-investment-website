@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { SITE_NAME, SITE_URL } from "@/lib/utils/constants";
 import { organizationSchema } from "@/lib/seo/structured-data";
 import { getAllSettings } from "@/lib/database/content";
+import ChatWidget from "@/components/chatbot/ChatWidget";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
