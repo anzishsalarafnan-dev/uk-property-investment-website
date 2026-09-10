@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useVoice } from "@/lib/chatbot/useVoice";
 import { CHAT_LANGUAGES } from "@/lib/chatbot/languages";
 
 interface Message {
@@ -18,14 +17,13 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("en-US");
   const [showLangMenu, setShowLangMenu] = useState(false);
-  const { isListening, isSpeaking, startListening, speak, stopSpeaking } = useVoice();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  async function sendMessage(text: string, viaVoice: boolean) {
+  async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
 
     const newMessages: Message[] = [...messages, { role: "user", text }];
@@ -46,22 +44,11 @@ export default function ChatWidget() {
       const data = await res.json();
       const reply = data.reply || "Sorry, something went wrong. Please try again.";
       setMessages((prev) => [...prev, { role: "model", text: reply }]);
-
-      if (viaVoice) {
-        speak(reply, language);
-      }
     } catch {
       setMessages((prev) => [...prev, { role: "model", text: "Sorry, something went wrong." }]);
     } finally {
       setLoading(false);
     }
-  }
-
-  function handleVoiceInput() {
-    stopSpeaking();
-    startListening(language, (transcript) => {
-      sendMessage(transcript, true);
-    });
   }
 
   const currentLangLabel = CHAT_LANGUAGES.find((l) => l.code === language)?.label || "English";
@@ -133,34 +120,18 @@ export default function ChatWidget() {
                 </span>
               </div>
             )}
-            {isListening && (
-              <div className="mx-auto max-w-[85%] rounded-full bg-red-50 px-3 py-1.5 text-center text-xs font-medium text-red-600 ring-1 ring-red-100">
-                🎤 Listening...
-              </div>
-            )}
           </div>
 
           <div className="flex items-center gap-2 border-t border-slate-200 bg-white p-3">
-            <button
-              onClick={handleVoiceInput}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors ${
-                isListening ? "bg-red-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
-              aria-label="Voice input"
-              type="button"
-              title="Tap to speak — reply will be read aloud"
-            >
-              🎤
-            </button>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage(input, false)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
               placeholder="Type a message..."
               className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-sm focus:border-slate-500 focus:outline-none"
             />
             <button
-              onClick={() => sendMessage(input, false)}
+              onClick={() => sendMessage(input)}
               disabled={loading}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-white hover:bg-slate-700 disabled:opacity-50"
               aria-label="Send"
