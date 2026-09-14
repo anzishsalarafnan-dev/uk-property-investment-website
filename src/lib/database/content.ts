@@ -161,3 +161,65 @@ export async function getAllSettings(): Promise<Record<string, string>> {
   });
   return map;
 }
+
+export interface SellerListingPublic {
+  id: string;
+  citySlug: string | null;
+  propertyType: string;
+  askingPrice: number;
+  bedrooms: number | null;
+  description: string | null;
+  createdAt: string;
+}
+
+export interface BuyerRequestPublic {
+  id: string;
+  citySlug: string | null;
+  propertyType: string;
+  budgetMax: number;
+  bedroomsWanted: number | null;
+  requirements: string | null;
+  createdAt: string;
+}
+
+export async function getApprovedSellerListings(): Promise<SellerListingPublic[]> {
+  const { data, error } = await supabase
+    .from("seller_listings")
+    .select("id, city_slug, property_type, asking_price, bedrooms, description, created_at")
+    .eq("is_approved", true)
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.error("getApprovedSellerListings error:", error.message);
+    return [];
+  }
+  return (data || []).map((r: any) => ({
+    id: r.id,
+    citySlug: r.city_slug,
+    propertyType: r.property_type,
+    askingPrice: r.asking_price,
+    bedrooms: r.bedrooms,
+    description: r.description,
+    createdAt: r.created_at,
+  }));
+}
+
+export async function getApprovedBuyerRequests(): Promise<BuyerRequestPublic[]> {
+  const { data, error } = await supabase
+    .from("buyer_requests")
+    .select("id, city_slug, property_type, budget_max, bedrooms_wanted, requirements, created_at")
+    .eq("is_approved", true)
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.error("getApprovedBuyerRequests error:", error.message);
+    return [];
+  }
+  return (data || []).map((r: any) => ({
+    id: r.id,
+    citySlug: r.city_slug,
+    propertyType: r.property_type,
+    budgetMax: r.budget_max,
+    bedroomsWanted: r.bedrooms_wanted,
+    requirements: r.requirements,
+    createdAt: r.created_at,
+  }));
+}
