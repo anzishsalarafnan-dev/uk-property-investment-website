@@ -90,7 +90,18 @@ def run():
             supabase.table("market_snapshots").upsert(results, on_conflict="city_slug").execute()
             logger.success(f"Saved {len(results)} snapshots to Supabase")
         except Exception as e:
-            logger.error(f"Failed to save to Supabase: {e}")
+            logger.error(f"Failed to save snapshots: {e}")
+
+        # Sync the same real prices into the public-facing cities table
+        # so /cities pages show today's actual government-sourced price.
+        for row in results:
+            try:
+                supabase.table("cities").update(
+                    {"avg_price": row["avg_price"]}
+                ).eq("slug", row["city_slug"]).execute()
+            except Exception as e:
+                logger.error(f"Failed to sync {row['city_slug']} into cities table: {e}")
+        logger.success(f"Synced {len(results)} cities' avg_price with live data")
     else:
         logger.warning("No results to save")
 
