@@ -2,6 +2,7 @@ import { getAllCities } from "@/lib/database/content";
 import NewsletterForm from "@/components/forms/NewsletterForm";
 import AnimatedHero from "@/components/home/AnimatedHero";
 import AnimatedCityCard from "@/components/home/AnimatedCityCard";
+import ReviewsSection from "@/components/home/ReviewsSection";
 
 export const revalidate = 3600;
 
@@ -23,6 +24,8 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      <ReviewsSection />
 
       <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-slate-900">Get Monthly UK Market Updates</h2>

@@ -19,6 +19,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/areas" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Areas</Link>
           <Link href="/admin/reviews" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Reviews</Link>
           <Link href="/admin/marketplace" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Marketplace</Link>
+          <Link href="/admin/guides" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Guides</Link>
+          <Link href="/admin/blog" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Blog</Link>
           <Link href="/admin/settings" className="text-sm font-semibold text-slate-600 hover:text-slate-900">Settings</Link>
         </div>
         <form action="/api/auth/logout" method="POST">

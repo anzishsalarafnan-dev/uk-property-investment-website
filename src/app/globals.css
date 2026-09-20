@@ -43,3 +43,12 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Keep Leaflet map controls/panes below our sticky navbar */
+.leaflet-container,
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom,
+.leaflet-control {
+  z-index: 10 !important;
+}
