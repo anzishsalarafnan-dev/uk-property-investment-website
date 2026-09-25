@@ -11,9 +11,11 @@ const sellerSchema = z.object({
   phone: z.string().optional(),
   citySlug: z.string().optional(),
   propertyType: z.string().min(1),
+  condition: z.string().optional(),
   askingPrice: z.number().positive(),
   bedrooms: z.number().optional(),
   description: z.string().optional(),
+  photos: z.array(z.string()).optional(),
   website: z.string().optional(),
   recaptchaToken: z.string().optional(),
 });
@@ -31,16 +33,16 @@ export async function POST(request: Request) {
     }
 
     const parsed = sellerSchema.safeParse(body);
-    if (!parsed.success) {
+    if (parsed.success === false) {
       return NextResponse.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
 
     const isHuman = await verifyRecaptcha(parsed.data.recaptchaToken || "");
-    if (!isHuman) {
+    if (isHuman === false) {
       return NextResponse.json({ error: "Verification failed" }, { status: 403 });
     }
 
-    const { name, email, phone, citySlug, propertyType, askingPrice, bedrooms, description } = parsed.data;
+    const { name, email, phone, citySlug, propertyType, condition, askingPrice, bedrooms, description, photos } = parsed.data;
 
     const { error } = await supabaseAdmin().from("seller_listings").insert({
       name,
@@ -48,9 +50,11 @@ export async function POST(request: Request) {
       phone: phone || null,
       city_slug: citySlug || null,
       property_type: propertyType,
+      condition: condition || null,
       asking_price: askingPrice,
       bedrooms: bedrooms || null,
       description: description || null,
+      photos: photos || [],
       is_approved: false,
     });
 

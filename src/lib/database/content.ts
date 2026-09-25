@@ -166,9 +166,11 @@ export interface SellerListingPublic {
   id: string;
   citySlug: string | null;
   propertyType: string;
+  condition: string | null;
   askingPrice: number;
   bedrooms: number | null;
   description: string | null;
+  photos: string[];
   createdAt: string;
 }
 
@@ -185,7 +187,7 @@ export interface BuyerRequestPublic {
 export async function getApprovedSellerListings(): Promise<SellerListingPublic[]> {
   const { data, error } = await supabase
     .from("seller_listings")
-    .select("id, city_slug, property_type, asking_price, bedrooms, description, created_at")
+    .select("id, city_slug, property_type, condition, asking_price, bedrooms, description, photos, created_at")
     .eq("is_approved", true)
     .order("created_at", { ascending: false });
   if (error) {
@@ -196,9 +198,11 @@ export async function getApprovedSellerListings(): Promise<SellerListingPublic[]
     id: r.id,
     citySlug: r.city_slug,
     propertyType: r.property_type,
+    condition: r.condition,
     askingPrice: r.asking_price,
     bedrooms: r.bedrooms,
     description: r.description,
+    photos: r.photos || [],
     createdAt: r.created_at,
   }));
 }

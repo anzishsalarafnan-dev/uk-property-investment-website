@@ -12,6 +12,7 @@ const schema = z.object({
   phone: z.string().optional(),
   citySlug: z.string().min(1, "Please select a city"),
   propertyType: z.string().min(1, "Please select a type"),
+  condition: z.string().min(1, "Please select a condition"),
   askingPrice: z.number().positive("Enter a valid price"),
   bedrooms: z.number().optional(),
   description: z.string().optional(),
@@ -22,8 +23,33 @@ type FormData = z.infer<typeof schema>;
 
 export default function SellPropertyForm({ cities }: { cities: { slug: string; name: string }[] }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const { getToken } = useRecaptcha();
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    const uploaded: string[] = [];
+
+    for (let i = 0; i < Math.min(files.length, 5); i++) {
+      const formData = new FormData();
+      formData.append("file", files[i]);
+      try {
+        const res = await fetch("/sell/upload-photo", { method: "POST", body: formData });
+        const data = await res.json();
+        if (data.url) uploaded.push(data.url);
+      } catch {
+        // skip failed upload, continue with others
+      }
+    }
+
+    setPhotos((prev) => [...prev, ...uploaded].slice(0, 5));
+    setUploading(false);
+  }
 
   async function onSubmit(data: FormData) {
     setStatus("loading");
@@ -32,11 +58,12 @@ export default function SellPropertyForm({ cities }: { cities: { slug: string; n
       const res = await fetch("/sell/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, recaptchaToken }),
+        body: JSON.stringify({ ...data, photos, recaptchaToken }),
       });
-      if (!res.ok) throw new Error("Failed");
+      if (res.ok === false) throw new Error("Failed");
       setStatus("success");
       reset();
+      setPhotos([]);
     } catch {
       setStatus("error");
     }
@@ -89,6 +116,16 @@ export default function SellPropertyForm({ cities }: { cities: { slug: string; n
         {errors.propertyType && <p className="mt-1 text-xs text-red-600">{errors.propertyType.message}</p>}
       </div>
       <div>
+        <label className="text-sm font-medium text-slate-700">Condition</label>
+        <select {...register("condition")} defaultValue="" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm">
+          <option value="" disabled>Select condition</option>
+          <option value="new">New / Recently renovated</option>
+          <option value="good">Good condition</option>
+          <option value="needs-work">Needs some work</option>
+        </select>
+        {errors.condition && <p className="mt-1 text-xs text-red-600">{errors.condition.message}</p>}
+      </div>
+      <div>
         <label className="text-sm font-medium text-slate-700">Asking price (£)</label>
         <input {...register("askingPrice", { valueAsNumber: true })} type="number" className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
         {errors.askingPrice && <p className="mt-1 text-xs text-red-600">{errors.askingPrice.message}</p>}
@@ -101,8 +138,20 @@ export default function SellPropertyForm({ cities }: { cities: { slug: string; n
         <label className="text-sm font-medium text-slate-700">Description (optional)</label>
         <textarea {...register("description")} rows={4} className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
       </div>
+      <div>
+        <label className="text-sm font-medium text-slate-700">Photos (up to 5)</label>
+        <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="mt-1 w-full text-sm" />
+        {uploading && <p className="mt-1 text-xs text-slate-500">Uploading...</p>}
+        {photos.length > 0 && (
+          <div className="mt-2 flex gap-2">
+            {photos.map((url, i) => (
+              <img key={i} src={url} alt="" className="h-16 w-16 rounded-md object-cover" />
+            ))}
+          </div>
+        )}
+      </div>
 
-      <button type="submit" disabled={status === "loading"} className="rounded-md bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50">
+      <button type="submit" disabled={status === "loading" || uploading} className="rounded-md bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 disabled:opacity-50">
         {status === "loading" ? "Submitting..." : "Submit Listing"}
       </button>
       {status === "error" && <p className="text-sm text-red-600">Something went wrong. Please try again.</p>}
