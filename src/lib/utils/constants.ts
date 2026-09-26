@@ -16,6 +16,8 @@ export const NAV_LINKS = [
   { label: "Cities", href: "/cities" },
   { label: "Map", href: "/map" },
   { label: "Valuation", href: "/valuation" },
+  { label: "Buy", href: "/listings/sell" },
+  { label: "Sell", href: "/sell" },
   { label: "Guides", href: "/guides" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
