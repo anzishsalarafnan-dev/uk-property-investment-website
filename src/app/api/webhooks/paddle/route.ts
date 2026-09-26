@@ -18,7 +18,16 @@ export async function POST(request: Request) {
 
     if (eventData.eventType === "transaction.completed") {
       const transaction = eventData.data;
-      const customerEmail = transaction.customer?.email || transaction.customData?.email;
+      let customerEmail: string | null = null;
+
+      if (transaction.customerId) {
+        try {
+          const customer = await paddle.customers.get(transaction.customerId);
+          customerEmail = customer.email;
+        } catch (e) {
+          console.error("Failed to fetch customer for email:", e);
+        }
+      }
 
       if (customerEmail) {
         await sendEmail({
@@ -30,6 +39,8 @@ export async function POST(request: Request) {
           </div>`,
         });
         console.log("Fulfillment email sent to:", customerEmail);
+      } else {
+        console.warn("No customer email found for transaction:", transaction.id);
       }
     }
 
