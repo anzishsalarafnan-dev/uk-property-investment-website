@@ -1,33 +1,59 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { getSession } from "@/lib/auth/session";
-import { isRateLimited, getClientIp } from "@/lib/security/rateLimit";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import crypto from "crypto";
 
-const loginSchema = z.object({ password: z.string().min(1) });
+export interface SessionData {
+  isAdmin?: boolean;
+}
 
-export async function POST(request: Request) {
+export const sessionOptions = {
+  password: process.env.SESSION_SECRET || "complex_password_at_least_32_characters_long_safety",
+  cookieName: "admin_session",
+  cookieOptions: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax" as const,
+    path: "/",
+  },
+};
+
+function timingSafeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+
+  if (bufA.length !== bufB.length) {
+    // Perform dummy timing comparison to prevent length timing leaks
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+export async function POST(req: Request) {
   try {
-    const ip = getClientIp(request);
-    if (isRateLimited(ip)) {
-      return NextResponse.json({ error: "Too many attempts. Try again later." }, { status: 429 });
+    const body = await req.json().catch(() => ({}));
+    const { password } = body;
+
+    const expectedPassword = process.env.ADMIN_PASSWORD;
+
+    if (!expectedPassword) {
+      console.error("[SECURITY] ADMIN_PASSWORD environment variable is not configured.");
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const parsed = loginSchema.safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json({ error: "Password required" }, { status: 400 });
+    if (typeof password !== "string" || !timingSafeEqual(password, expectedPassword)) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    if (parsed.data.password !== process.env.ADMIN_PASSWORD) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
-    }
-
-    const session = await getSession();
+    const cookieStore = await cookies();
+    const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
     session.isAdmin = true;
     await session.save();
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: "Authenticated successfully" });
   } catch {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 }
